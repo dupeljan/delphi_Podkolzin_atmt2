@@ -1,0 +1,31 @@
+unit provider_window;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, Data.DB, Vcl.Grids,
+  Vcl.DBGrids, data_moudule;
+
+type
+  TPROVIDER_FORM = class(TForm)
+    MainMenu1: TMainMenu;
+    ADD: TMenuItem;
+    DELETE: TMenuItem;
+    EDIT: TMenuItem;
+    DBGrid1: TDBGrid;
+    DATA_MODULE: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PROVIDER_FORM: TPROVIDER_FORM;
+
+implementation
+
+{$R *.dfm}
+
+end.

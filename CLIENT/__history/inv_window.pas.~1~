@@ -1,0 +1,24 @@
+unit inv_window;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs;
+
+type
+  TINV_FORM = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  INV_FORM: TINV_FORM;
+
+implementation
+
+{$R *.dfm}
+
+end.

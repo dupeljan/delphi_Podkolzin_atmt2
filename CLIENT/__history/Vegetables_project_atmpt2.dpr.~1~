@@ -1,0 +1,14 @@
+program Vegetables_project_atmpt2;
+
+uses
+  Vcl.Forms,
+  main_menu in 'main_menu.pas' {Form2};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TForm2, Form2);
+  Application.Run;
+end.

@@ -1,0 +1,24 @@
+unit inv_item_add_price_window;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs;
+
+type
+  TINVOICE_ITEM_ADD_PRICE_FORM = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  INVOICE_ITEM_ADD_PRICE_FORM: TINVOICE_ITEM_ADD_PRICE_FORM;
+
+implementation
+
+{$R *.dfm}
+
+end.
