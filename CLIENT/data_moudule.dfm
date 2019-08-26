@@ -2,8 +2,8 @@ object dm: Tdm
   OldCreateOrder = False
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
-  Height = 577
-  Width = 646
+  Height = 947
+  Width = 714
   object my_database: TIBDatabase
     Connected = True
     DatabaseName = 
@@ -175,8 +175,8 @@ object dm: Tdm
     CachedUpdates = False
     TableName = 'PURCHASE_INV'
     UniDirectional = False
-    Left = 48
-    Top = 336
+    Left = 56
+    Top = 376
   end
   object TPurchase_inv_item: TIBTable
     Database = my_database
@@ -185,15 +185,15 @@ object dm: Tdm
     CachedUpdates = False
     TableName = 'PURCHASE_INV_ITEM'
     UniDirectional = False
-    Left = 312
-    Top = 344
+    Left = 320
+    Top = 384
   end
   object spAddPurchase_inv: TIBStoredProc
     Database = my_database
     Transaction = IBTransaction1
     StoredProcName = 'ADD_PURCHASE_INV'
-    Left = 48
-    Top = 400
+    Left = 40
+    Top = 456
     ParamData = <
       item
         DataType = ftDate
@@ -210,8 +210,8 @@ object dm: Tdm
     Database = my_database
     Transaction = IBTransaction1
     StoredProcName = 'DELETE_PURCHASE_INV'
-    Left = 136
-    Top = 400
+    Left = 144
+    Top = 440
     ParamData = <
       item
         DataType = ftInteger
@@ -223,8 +223,8 @@ object dm: Tdm
     Database = my_database
     Transaction = IBTransaction1
     StoredProcName = 'ADD_PURCHASE_INV_ITEM'
-    Left = 312
-    Top = 408
+    Left = 320
+    Top = 448
     ParamData = <
       item
         DataType = ftInteger
@@ -256,8 +256,8 @@ object dm: Tdm
     Database = my_database
     Transaction = IBTransaction1
     StoredProcName = 'DELETE_PURCHASE_INV_ITEM'
-    Left = 416
-    Top = 408
+    Left = 424
+    Top = 448
     ParamData = <
       item
         DataType = ftInteger
@@ -269,8 +269,8 @@ object dm: Tdm
     Database = my_database
     Transaction = IBTransaction1
     StoredProcName = 'EDIT_PURCHASE_INV'
-    Left = 200
-    Top = 400
+    Left = 208
+    Top = 440
     ParamData = <
       item
         DataType = ftDate
@@ -291,6 +291,7 @@ object dm: Tdm
     ParamCheck = True
     SQL.Strings = (
       'select purchase_inv_item.id as purchase_inv_item_id,'
+      '       purchase_inv_id,'
       '       product_id,provider_id,product_count,price,'
       '       product.name as product_name,'
       '       provider.name as provider_name'
@@ -301,12 +302,288 @@ object dm: Tdm
       'join'
       'provider on provider.id = provider_id'
       'where purchase_inv_id = :in_purchase_id ;')
-    Left = 424
-    Top = 344
+    Left = 432
+    Top = 384
     ParamData = <
       item
         DataType = ftInteger
         Name = 'in_purchase_id'
+        ParamType = ptInput
+      end>
+  end
+  object TLoss: TIBTable
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    TableName = 'LOSS'
+    UniDirectional = False
+    Left = 56
+    Top = 584
+  end
+  object spAddLoss: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'ADD_LOSS'
+    Left = 56
+    Top = 648
+    ParamData = <
+      item
+        DataType = ftDate
+        Name = 'IN_DATE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'OUT_ID'
+        ParamType = ptOutput
+      end>
+  end
+  object spDeleteLoss: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'DELETE_LOSS'
+    Left = 112
+    Top = 648
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IN_ID'
+        ParamType = ptInput
+      end>
+  end
+  object spEditLoss: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'EDIT_LOSS'
+    Left = 168
+    Top = 648
+    ParamData = <
+      item
+        DataType = ftDate
+        Name = 'IN_DATE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'IN_ID'
+        ParamType = ptInput
+      end>
+  end
+  object spAddLoss_item: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'ADD_LOSS_ITEM'
+    Left = 336
+    Top = 640
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IN_PRODUCT_COUNT'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'IN_PRODUCT_ID'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'IN_LOSS_ID'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'OUT_ID'
+        ParamType = ptOutput
+      end>
+  end
+  object spDeleteLoss_item: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'DELETE_LOSS_ITEM'
+    Left = 432
+    Top = 640
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IN_ID'
+        ParamType = ptInput
+      end>
+  end
+  object TLoss_item: TIBTable
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    TableName = 'LOSS_ITEM'
+    UniDirectional = False
+    Left = 336
+    Top = 584
+  end
+  object qLoss_item_filtered: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select loss_item.id as loss_item_id,'
+      '       loss_id,'
+      '       product_id,provider_id,product_count,'
+      '       product.name as product_name,'
+      '       provider.name as provider_name'
+      'from'
+      'loss_item'
+      'join'
+      'product on loss_item.product_id = product.id'
+      'join'
+      'provider on provider.id = provider_id'
+      'where loss_id = :in_loss_id;')
+    Left = 440
+    Top = 584
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'in_loss_id'
+        ParamType = ptInput
+      end>
+  end
+  object TDaily_income: TIBTable
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    TableName = 'DAILY_INCOME'
+    UniDirectional = False
+    Left = 56
+    Top = 776
+  end
+  object spAddDaily_income: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'ADD_DAILY_INCOME'
+    Left = 56
+    Top = 840
+    ParamData = <
+      item
+        DataType = ftDate
+        Name = 'IN_DATE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'OUT_ID'
+        ParamType = ptOutput
+      end>
+  end
+  object spDeleteDaily_income: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'DELETE_DAILY_INCOME'
+    Left = 112
+    Top = 840
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IN_ID'
+        ParamType = ptInput
+      end>
+  end
+  object spEditDaily_income: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'EDIT_DAILY_INCOME'
+    Left = 168
+    Top = 840
+    ParamData = <
+      item
+        DataType = ftDate
+        Name = 'IN_DATE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'IN_ID'
+        ParamType = ptInput
+      end>
+  end
+  object spAddDaily_income_item: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'ADD_DAILY_ICOME_ITEM'
+    Left = 336
+    Top = 832
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IN_PRODUCT_COUNT'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'IN_PRODUCT_ID'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'IN_DAILY_INCOME_ID'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'OUT_ID'
+        ParamType = ptOutput
+      end>
+  end
+  object spDeleteDaily_income_item: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'DELETE_DAILY_INCOME_ITEM'
+    Left = 432
+    Top = 832
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IN_ID'
+        ParamType = ptInput
+      end>
+  end
+  object TDaily_income_item: TIBTable
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    TableName = 'DAILY_INCOME_ITEM'
+    UniDirectional = False
+    Left = 336
+    Top = 776
+  end
+  object qDaily_income_item_filtered: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select daily_income_item.id as daily_income_item_id,'
+      '       daily_income_id,'
+      '       product_id,provider_id,product_count,'
+      '       product.name as product_name,'
+      '       provider.name as provider_name'
+      'from'
+      'daily_income_item'
+      'join'
+      'product on daily_income_item.product_id = product.id'
+      'join'
+      'provider on provider.id = provider_id'
+      'where daily_income_id = :in_daily_income_id;')
+    Left = 440
+    Top = 776
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'in_daily_income_id'
         ParamType = ptInput
       end>
   end

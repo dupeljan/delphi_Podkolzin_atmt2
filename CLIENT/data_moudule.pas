@@ -27,6 +27,22 @@ type
     spDeletePurcahse_inv_item: TIBStoredProc;
     spEditPurchase_inv: TIBStoredProc;
     qPurchase_inv_item_filtered: TIBQuery;
+    TLoss: TIBTable;
+    spAddLoss: TIBStoredProc;
+    spDeleteLoss: TIBStoredProc;
+    spEditLoss: TIBStoredProc;
+    spAddLoss_item: TIBStoredProc;
+    spDeleteLoss_item: TIBStoredProc;
+    TLoss_item: TIBTable;
+    qLoss_item_filtered: TIBQuery;
+    TDaily_income: TIBTable;
+    spAddDaily_income: TIBStoredProc;
+    spDeleteDaily_income: TIBStoredProc;
+    spEditDaily_income: TIBStoredProc;
+    spAddDaily_income_item: TIBStoredProc;
+    spDeleteDaily_income_item: TIBStoredProc;
+    TDaily_income_item: TIBTable;
+    qDaily_income_item_filtered: TIBQuery;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
     procedure update_all;
@@ -62,6 +78,12 @@ begin
   dm.TPurchase_inv.Close;
   dm.TPurchase_inv_item.Close;
   dm.qPurchase_inv_item_filtered.Close;
+  dm.TLoss.Close;
+  dm.TLoss_item.Close;
+  dm.qLoss_item_filtered.Close;
+  dm.TDaily_income.Close;
+  dm.TDaily_income_item.Close;
+  dm.qDaily_income_item_filtered.Close;
 
   DM.TProvider.Open;
   DM.TProduct.Open;
@@ -69,6 +91,12 @@ begin
   dm.TPurchase_inv.Open;
   dm.TPurchase_inv_item.Open;
   dm.qPurchase_inv_item_filtered.Open;
+  dm.TLoss.Open;
+  dm.TLoss_item.Open;
+  dm.qLoss_item_filtered.Open;
+  dm.TDaily_income.Open;
+  dm.TDaily_income_item.Open;
+  dm.qDaily_income_item_filtered.Open;
 end;
 
 

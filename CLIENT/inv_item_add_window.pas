@@ -11,7 +11,7 @@ type
   TINVOICE_ITEM_ADD_FORM = class(TForm)
     DataSource1: TDataSource;
     DBGrid1: TDBGrid;
-    LabeledEdit1: TLabeledEdit;
+    LabeledEdit_count: TLabeledEdit;
     Label1: TLabel;
     BitBtn1: TBitBtn;
   private

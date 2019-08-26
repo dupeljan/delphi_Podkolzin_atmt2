@@ -127,6 +127,14 @@
             <Form>INVOICE_ITEM_ADD_FORM</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="loss_window.pas">
+            <Form>LOSS_FORM</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="daily_income_window.pas">
+            <Form>DAILY_INCOME_FORM</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
