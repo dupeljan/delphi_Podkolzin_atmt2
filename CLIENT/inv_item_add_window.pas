@@ -13,8 +13,6 @@ type
     DBGrid1: TDBGrid;
     LabeledEdit1: TLabeledEdit;
     Label1: TLabel;
-    LabeledEdit2: TLabeledEdit;
-    Label2: TLabel;
     BitBtn1: TBitBtn;
   private
     { Private declarations }

@@ -11,9 +11,9 @@ type
   TINVOICE_ITEM_ADD_PRICE_FORM = class(TForm)
     DataSource1: TDataSource;
     DBGrid1: TDBGrid;
-    LabeledEdit1: TLabeledEdit;
+    LabeledEdit_count: TLabeledEdit;
     Label1: TLabel;
-    LabeledEdit2: TLabeledEdit;
+    LabeledEdit_price: TLabeledEdit;
     Label2: TLabel;
     BitBtn1: TBitBtn;
   private

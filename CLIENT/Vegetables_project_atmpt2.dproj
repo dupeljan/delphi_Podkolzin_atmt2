@@ -119,6 +119,14 @@
             <Form>INV_FORM</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="inv_item_add_price_window.pas">
+            <Form>INVOICE_ITEM_ADD_PRICE_FORM</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="inv_item_add_window.pas">
+            <Form>INVOICE_ITEM_ADD_FORM</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

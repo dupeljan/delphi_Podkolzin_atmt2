@@ -20,13 +20,6 @@ object INVOICE_ITEM_ADD_FORM: TINVOICE_ITEM_ADD_FORM
     Height = 13
     Caption = #1050#1054#1051'_'#1042#1054
   end
-  object Label2: TLabel
-    Left = 507
-    Top = 93
-    Width = 28
-    Height = 13
-    Caption = #1062#1045#1053#1040
-  end
   object DBGrid1: TDBGrid
     Left = 8
     Top = 16
@@ -74,17 +67,6 @@ object INVOICE_ITEM_ADD_FORM: TINVOICE_ITEM_ADD_FORM
     LabelSpacing = -15
     TabOrder = 1
   end
-  object LabeledEdit2: TLabeledEdit
-    Left = 456
-    Top = 112
-    Width = 121
-    Height = 21
-    EditLabel.Width = 61
-    EditLabel.Height = 13
-    EditLabel.Caption = 'LabeledEdit2'
-    LabelSpacing = -15
-    TabOrder = 2
-  end
   object BitBtn1: TBitBtn
     Left = 480
     Top = 168
@@ -92,7 +74,7 @@ object INVOICE_ITEM_ADD_FORM: TINVOICE_ITEM_ADD_FORM
     Height = 25
     Kind = bkOK
     NumGlyphs = 2
-    TabOrder = 3
+    TabOrder = 2
   end
   object DataSource1: TDataSource
     DataSet = dm.qProductWithProvider

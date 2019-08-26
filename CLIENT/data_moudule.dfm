@@ -185,7 +185,7 @@ object dm: Tdm
     CachedUpdates = False
     TableName = 'PURCHASE_INV_ITEM'
     UniDirectional = False
-    Left = 248
+    Left = 312
     Top = 344
   end
   object spAddPurchase_inv: TIBStoredProc
@@ -223,8 +223,8 @@ object dm: Tdm
     Database = my_database
     Transaction = IBTransaction1
     StoredProcName = 'ADD_PURCHASE_INV_ITEM'
-    Left = 256
-    Top = 400
+    Left = 312
+    Top = 408
     ParamData = <
       item
         DataType = ftInteger
@@ -256,12 +256,57 @@ object dm: Tdm
     Database = my_database
     Transaction = IBTransaction1
     StoredProcName = 'DELETE_PURCHASE_INV_ITEM'
-    Left = 352
-    Top = 400
+    Left = 416
+    Top = 408
     ParamData = <
       item
         DataType = ftInteger
         Name = 'IN_ID'
+        ParamType = ptInput
+      end>
+  end
+  object spEditPurchase_inv: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'EDIT_PURCHASE_INV'
+    Left = 200
+    Top = 400
+    ParamData = <
+      item
+        DataType = ftDate
+        Name = 'IN_DATE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'IN_ID'
+        ParamType = ptInput
+      end>
+  end
+  object qPurchase_inv_item_filtered: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select purchase_inv_item.id as purchase_inv_item_id,'
+      '       product_id,provider_id,product_count,price,'
+      '       product.name as product_name,'
+      '       provider.name as provider_name'
+      'from'
+      'purchase_inv_item'
+      'join'
+      'product on purchase_inv_item.product_id = product.id'
+      'join'
+      'provider on provider.id = provider_id'
+      'where purchase_inv_id = :in_purchase_id ;')
+    Left = 424
+    Top = 344
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'in_purchase_id'
         ParamType = ptInput
       end>
   end

@@ -63,25 +63,25 @@ object INVOICE_ITEM_ADD_PRICE_FORM: TINVOICE_ITEM_ADD_PRICE_FORM
         Visible = True
       end>
   end
-  object LabeledEdit1: TLabeledEdit
+  object LabeledEdit_count: TLabeledEdit
     Left = 456
     Top = 48
     Width = 121
     Height = 21
-    EditLabel.Width = 61
+    EditLabel.Width = 88
     EditLabel.Height = 13
-    EditLabel.Caption = 'LabeledEdit1'
+    EditLabel.Caption = 'LabeledEdit_count'
     LabelSpacing = -15
     TabOrder = 1
   end
-  object LabeledEdit2: TLabeledEdit
+  object LabeledEdit_price: TLabeledEdit
     Left = 456
     Top = 112
     Width = 121
     Height = 21
-    EditLabel.Width = 61
+    EditLabel.Width = 84
     EditLabel.Height = 13
-    EditLabel.Caption = 'LabeledEdit2'
+    EditLabel.Caption = 'LabeledEdit_price'
     LabelSpacing = -15
     TabOrder = 2
   end

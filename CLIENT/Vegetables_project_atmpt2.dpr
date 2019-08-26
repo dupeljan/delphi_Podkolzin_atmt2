@@ -8,7 +8,9 @@ uses
   provider_add_window in 'provider_add_window.pas' {PROVIDER_ADD_FORM},
   product_window in 'product_window.pas' {PRODUCT_FORM},
   product_add in 'product_add.pas' {product_add_form},
-  inv_window in 'inv_window.pas' {INV_FORM};
+  inv_window in 'inv_window.pas' {INV_FORM},
+  inv_item_add_price_window in 'inv_item_add_price_window.pas' {INVOICE_ITEM_ADD_PRICE_FORM},
+  inv_item_add_window in 'inv_item_add_window.pas' {INVOICE_ITEM_ADD_FORM};
 
 {$R *.res}
 
@@ -22,5 +24,7 @@ begin
   Application.CreateForm(TPRODUCT_FORM, PRODUCT_FORM);
   Application.CreateForm(Tproduct_add_form, product_add_form);
   Application.CreateForm(TINV_FORM, INV_FORM);
+  Application.CreateForm(TINVOICE_ITEM_ADD_PRICE_FORM, INVOICE_ITEM_ADD_PRICE_FORM);
+  Application.CreateForm(TINVOICE_ITEM_ADD_FORM, INVOICE_ITEM_ADD_FORM);
   Application.Run;
 end.

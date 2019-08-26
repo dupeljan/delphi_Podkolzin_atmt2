@@ -25,6 +25,8 @@ type
     spDeletePurchase_inv: TIBStoredProc;
     spAddPurchase_inv_item: TIBStoredProc;
     spDeletePurcahse_inv_item: TIBStoredProc;
+    spEditPurchase_inv: TIBStoredProc;
+    qPurchase_inv_item_filtered: TIBQuery;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
     procedure update_all;
@@ -57,10 +59,16 @@ begin
   DM.TProvider.Close;
   DM.TProduct.Close;
   dm.qProductWithProvider.Close;
+  dm.TPurchase_inv.Close;
+  dm.TPurchase_inv_item.Close;
+  dm.qPurchase_inv_item_filtered.Close;
 
   DM.TProvider.Open;
   DM.TProduct.Open;
   dm.qProductWithProvider.Open;
+  dm.TPurchase_inv.Open;
+  dm.TPurchase_inv_item.Open;
+  dm.qPurchase_inv_item_filtered.Open;
 end;
 
 
