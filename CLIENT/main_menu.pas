@@ -16,7 +16,7 @@ type
     MENU_PURCHASE_INV_ADD: TMenuItem;
     MENU_LOSS_ADD: TMenuItem;
     MENU_DAILY_INCOME_ADD: TMenuItem;
-    N5: TMenuItem;
+    MENU_DELETE_INV: TMenuItem;
     N6: TMenuItem;
     N7: TMenuItem;
     N8: TMenuItem;
@@ -33,6 +33,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure ComboBox_invChange(Sender: TObject);
     procedure DBGrid_invCellClick(Column: TColumn);
+    procedure MENU_DELETE_INVClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -63,6 +64,9 @@ end;
 procedure TMAIN_MENU_FORM.DBGrid_invCellClick(Column: TColumn);
 var id : integer;
 begin
+  // Меняем содержимое правой таблицы по нажатию на левую
+  // В зависимости от состояния комбобокса
+
   case ComboBox_inv.ItemIndex of
     0:begin
       id :=  dm.TPurchase_inv.FieldByName('ID').Value;
@@ -100,6 +104,69 @@ end;
 procedure TMAIN_MENU_FORM.MENU_DAILY_INCOME_ADDClick(Sender: TObject);
 begin
    DAILY_INCOME_FORM.SHOWMODAL;
+end;
+
+procedure TMAIN_MENU_FORM.MENU_DELETE_INVClick(Sender: TObject);
+begin
+  case ComboBox_inv.ItemIndex of
+  0:   begin
+     // Create dialog window
+      if MessageDlg('kill '+dm.TPurchase_inv.FieldByName('ID').AsString+'?',
+                mtConfirmation,[mbYes,mbNo],0)=mrYes then
+        begin
+
+          // Receve id from grid
+          dm.spDeletePurchase_inv.ParamByName('IN_ID').Value:=dm.TPurchase_inv.FieldByName('ID').Value;
+
+          // Execute the procedure
+          if not(dm.spDeletePurchase_inv.Transaction.InTransaction) then
+             dm.spDeletePurchase_inv.Transaction.StartTransaction;
+          dm.spDeletePurchase_inv.ExecProc;
+          dm.spDeletePurchase_inv.Transaction.Commit;
+
+          // Reopen table
+        end;
+    end;
+  1: begin
+       // Create dialog window
+      if MessageDlg('kill '+dm.TLoss.FieldByName('ID').AsString+'?',
+                mtConfirmation,[mbYes,mbNo],0)=mrYes then
+        begin
+
+          // Receve id from grid
+          dm.spDeleteLoss.ParamByName('IN_ID').Value:=dm.TLoss.FieldByName('ID').Value;
+
+          // Execute the procedure
+          if not(dm.spDeleteLoss.Transaction.InTransaction) then
+             dm.spDeleteLoss.Transaction.StartTransaction;
+          dm.spDeleteLoss.ExecProc;
+          dm.spDeleteLoss.Transaction.Commit;
+
+          // Reopen table
+        end;
+  end;
+
+  2: begin
+      // Create dialog window
+      if MessageDlg('kill '+dm.TDaily_income.FieldByName('ID').AsString+'?',
+                mtConfirmation,[mbYes,mbNo],0)=mrYes then
+        begin
+
+          // Receve id from grid
+          dm.spDeleteDaily_income.ParamByName('IN_ID').Value:=dm.TDaily_income.FieldByName('ID').Value;
+
+          // Execute the procedure
+          if not(dm.spDeleteDaily_income.Transaction.InTransaction) then
+             dm.spDeleteDaily_income.Transaction.StartTransaction;
+          dm.spDeleteDaily_income.ExecProc;
+          dm.spDeleteDaily_income.Transaction.Commit;
+
+          // Reopen table
+        end;
+  end;
+
+  end;
+  dm.update_all;
 end;
 
 procedure TMAIN_MENU_FORM.MENU_LOSS_ADDClick(Sender: TObject);

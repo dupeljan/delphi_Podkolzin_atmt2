@@ -18,21 +18,40 @@ object MAIN_MENU_FORM: TMAIN_MENU_FORM
   TextHeight = 13
   object DBGrid_inv: TDBGrid
     Left = 0
-    Top = 24
+    Top = 35
     Width = 320
     Height = 401
+    DataSource = DataSource_inv
     TabOrder = 0
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
     TitleFont.Height = -11
     TitleFont.Name = 'Tahoma'
     TitleFont.Style = []
+    OnCellClick = DBGrid_invCellClick
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'ID'
+        ReadOnly = True
+        Title.Caption = #1053#1054#1052#1045#1056
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'THE_DATE'
+        ReadOnly = True
+        Title.Caption = #1044#1040#1058#1040
+        Width = 100
+        Visible = True
+      end>
   end
   object DBGrid_inv_item: TDBGrid
-    Left = 320
+    Left = 326
     Top = 48
     Width = 473
     Height = 377
+    DataSource = DataSource_inv_item
     TabOrder = 1
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
@@ -42,11 +61,12 @@ object MAIN_MENU_FORM: TMAIN_MENU_FORM
   end
   object ComboBox_inv: TComboBox
     Left = 0
-    Top = -3
+    Top = 8
     Width = 320
     Height = 21
     TabOrder = 2
     Text = 'ComboBox_inv'
+    OnChange = ComboBox_invChange
     Items.Strings = (
       #1055#1056#1048#1061#1054#1044#1053#1067#1045' '#1053#1040#1050#1051#1040#1044#1053#1067#1045
       #1057#1055#1048#1057#1040#1053#1048#1071
@@ -92,10 +112,12 @@ object MAIN_MENU_FORM: TMAIN_MENU_FORM
     end
   end
   object DataSource_inv: TDataSource
+    DataSet = dm.TPurchase_inv
     Left = 376
     Top = 8
   end
   object DataSource_inv_item: TDataSource
+    DataSet = dm.qPurchase_inv_item_filtered
     Left = 496
     Top = 8
   end

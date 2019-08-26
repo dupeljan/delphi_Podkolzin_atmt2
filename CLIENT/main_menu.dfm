@@ -1,7 +1,6 @@
 object MAIN_MENU_FORM: TMAIN_MENU_FORM
   Left = 0
   Top = 0
-  Align = alClient
   Caption = #1043#1051#1040#1042#1053#1054#1045' '#1052#1045#1053#1070
   ClientHeight = 424
   ClientWidth = 791
@@ -58,11 +57,38 @@ object MAIN_MENU_FORM: TMAIN_MENU_FORM
     TitleFont.Height = -11
     TitleFont.Name = 'Tahoma'
     TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'PRODUCT_NAME'
+        Title.Caption = #1053#1040#1048#1052#1045#1053#1054#1042#1040#1053#1048#1045
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PROVIDER_NAME'
+        Title.Caption = #1055#1056#1054#1048#1047#1042#1054#1044#1048#1058#1045#1051#1068
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PRODUCT_COUNT'
+        Title.Caption = #1050#1054#1051'-'#1042#1054
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PRICE'
+        Title.Caption = #1062#1045#1053#1040
+        Visible = True
+      end>
   end
   object ComboBox_inv: TComboBox
     Left = 0
     Top = 8
-    Width = 320
+    Width = 777
     Height = 21
     TabOrder = 2
     Text = 'ComboBox_inv'
@@ -97,8 +123,9 @@ object MAIN_MENU_FORM: TMAIN_MENU_FORM
         Caption = #1044#1054#1041#1040#1042#1048#1058#1068' '#1055#1056#1054#1044#1040#1046#1048' '#1047#1040' '#1044#1045#1053#1068
         OnClick = MENU_DAILY_INCOME_ADDClick
       end
-      object N5: TMenuItem
+      object MENU_DELETE_INV: TMenuItem
         Caption = #1059#1044#1040#1051#1048#1058#1068' '#1053#1040#1050#1051#1040#1044#1053#1059#1070
+        OnClick = MENU_DELETE_INVClick
       end
       object N6: TMenuItem
         Caption = #1069#1050#1057#1055#1054#1056#1058' '#1042' '#1042#1054#1056#1044

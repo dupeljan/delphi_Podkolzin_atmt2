@@ -61,27 +61,33 @@ begin
 end;
 
 procedure TMAIN_MENU_FORM.DBGrid_invCellClick(Column: TColumn);
+var id : integer;
 begin
   case ComboBox_inv.ItemIndex of
     0:begin
-      dm.qPurchase_inv_item_filtered.FieldByName('IN_PURCHASE_INV_ID').Value:=
-      dm.TPurchase_inv.FieldByName('ID').Value;
+      id :=  dm.TPurchase_inv.FieldByName('ID').Value;
+      dm.qPurchase_inv_item_filtered.ParamByName('in_purchase_id').Value:= id;
       DataSource_inv_item.DataSet := dm.qPurchase_inv_item_filtered;
     end;
 
     1: begin
-      dm.qLoss_item_filtered.FieldByName('IN_LOSS_ID').Value:=
-      dm.TLoss.FieldByName('ID').Value;
+      id :=   dm.TLoss.FieldByName('ID').Value;
+      dm.qLoss_item_filtered.ParamByName('in_loss_id').Value:= id;
       DataSource_inv_item.DataSet := dm.qLoss_item_filtered;
     end;
 
     2: begin
-      dm.qDaily_income_item_filtered.FieldByName('IN_DAILY_INCOME_ID').Value:=
-      dm.TDaily_income.FieldByName('ID').Value;
+      id := dm.TDaily_income.FieldByName('ID').Value;
+      dm.qDaily_income_item_filtered.ParamByName('in_daily_income_id').Value:= id;
       DataSource_inv_item.DataSet := dm.qDaily_income_item_filtered;
     end;
   end;
   dm.update_all;
+  case ComboBox_inv.ItemIndex of
+  0: dm.TPurchase_inv.Locate('ID',id,[]);
+  1: dm.TLoss.Locate('ID',id,[]);
+  2: dm.TDaily_income.Locate('ID',id,[]);
+  end;
 end;
 
 procedure TMAIN_MENU_FORM.FormCreate(Sender: TObject);
