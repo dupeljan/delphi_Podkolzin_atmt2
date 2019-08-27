@@ -1,0 +1,32 @@
+unit exel_input_window;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  Vcl.StdCtrls, Vcl.ComCtrls;
+
+type
+  TEXEL_INPUT_FORM = class(TForm)
+    DateTimeFrom: TDateTimePicker;
+    DateTimeTo: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    DBGrid1: TDBGrid;
+    DataSource1: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  EXEL_INPUT_FORM: TEXEL_INPUT_FORM;
+
+implementation
+
+{$R *.dfm}
+
+end.

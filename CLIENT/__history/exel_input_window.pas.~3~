@@ -1,0 +1,43 @@
+unit exel_input_window;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  Vcl.StdCtrls, Vcl.ComCtrls, data_moudule;
+
+type
+  TEXEL_INPUT_FORM = class(TForm)
+    DateTimeFrom: TDateTimePicker;
+    DateTimeTo: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    DBGrid1: TDBGrid;
+    DataSource1: TDataSource;
+    BUTTON_ADD: TButton;
+    BUTTON_DELETE: TButton;
+    BUTTON_CREATE_EXEL: TButton;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  EXEL_INPUT_FORM: TEXEL_INPUT_FORM;
+
+implementation
+
+{$R *.dfm}
+
+procedure local_update_all;
+begin
+    // setup dataset for output
+    dm.qLoss_item_filtered.ParamByName('in_loss_id').Value :=
+    LOSS_ID;
+    dm.update_all;
+end;
+
+end.

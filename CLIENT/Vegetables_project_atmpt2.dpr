@@ -13,7 +13,9 @@ uses
   inv_item_add_window in 'inv_item_add_window.pas' {INVOICE_ITEM_ADD_FORM},
   loss_window in 'loss_window.pas' {LOSS_FORM},
   daily_income_window in 'daily_income_window.pas' {DAILY_INCOME_FORM},
-  WordExelReport in 'WordExelReport.pas';
+  WordExelReport in 'WordExelReport.pas',
+  exel_input_window in 'exel_input_window.pas' {EXEL_INPUT_FORM},
+  choose_provider_window in 'choose_provider_window.pas' {CHOOSE_PROVIDER_FORM};
 
 {$R *.res}
 
@@ -31,5 +33,7 @@ begin
   Application.CreateForm(TINVOICE_ITEM_ADD_FORM, INVOICE_ITEM_ADD_FORM);
   Application.CreateForm(TLOSS_FORM, LOSS_FORM);
   Application.CreateForm(TDAILY_INCOME_FORM, DAILY_INCOME_FORM);
+  Application.CreateForm(TEXEL_INPUT_FORM, EXEL_INPUT_FORM);
+  Application.CreateForm(TCHOOSE_PROVIDER_FORM, CHOOSE_PROVIDER_FORM);
   Application.Run;
 end.

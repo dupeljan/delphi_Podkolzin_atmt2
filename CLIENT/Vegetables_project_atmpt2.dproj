@@ -136,6 +136,14 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="WordExelReport.pas"/>
+        <DCCReference Include="exel_input_window.pas">
+            <Form>EXEL_INPUT_FORM</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="choose_provider_window.pas">
+            <Form>CHOOSE_PROVIDER_FORM</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

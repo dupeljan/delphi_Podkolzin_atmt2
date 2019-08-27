@@ -17,8 +17,8 @@ type
     MENU_LOSS_ADD: TMenuItem;
     MENU_DAILY_INCOME_ADD: TMenuItem;
     MENU_DELETE_INV: TMenuItem;
-    N6: TMenuItem;
-    N7: TMenuItem;
+    MENU_WORD_EXPORT: TMenuItem;
+    MENU_REPORT: TMenuItem;
     N8: TMenuItem;
     DBGrid_inv: TDBGrid;
     DBGrid_inv_item: TDBGrid;
@@ -34,7 +34,8 @@ type
     procedure ComboBox_invChange(Sender: TObject);
     procedure DBGrid_invCellClick(Column: TColumn);
     procedure MENU_DELETE_INVClick(Sender: TObject);
-    procedure N6Click(Sender: TObject);
+    procedure MENU_WORD_EXPORTClick(Sender: TObject);
+    procedure MENU_REPORTClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -49,7 +50,7 @@ implementation
 {$R *.dfm}
 
 uses provider_window, product_window, inv_window, loss_window,
-  daily_income_window, data_moudule, WordExelReport;
+  daily_income_window, data_moudule, WordExelReport, exel_input_window;
 
 procedure TMAIN_MENU_FORM.ComboBox_invChange(Sender: TObject);
 begin
@@ -190,7 +191,12 @@ begin
    INV_FORM.ShowModal;
 end;
 
-procedure TMAIN_MENU_FORM.N6Click(Sender: TObject);
+procedure TMAIN_MENU_FORM.MENU_REPORTClick(Sender: TObject);
+begin
+ EXEL_INPUT_FORM.showModal;
+end;
+
+procedure TMAIN_MENU_FORM.MENU_WORD_EXPORTClick(Sender: TObject);
 begin
   case ComboBox_inv.ItemIndex of
   0: create_invoice;

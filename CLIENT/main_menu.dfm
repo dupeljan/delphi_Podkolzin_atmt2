@@ -127,13 +127,14 @@ object MAIN_MENU_FORM: TMAIN_MENU_FORM
         Caption = #1059#1044#1040#1051#1048#1058#1068' '#1053#1040#1050#1051#1040#1044#1053#1059#1070
         OnClick = MENU_DELETE_INVClick
       end
-      object N6: TMenuItem
+      object MENU_WORD_EXPORT: TMenuItem
         Caption = #1069#1050#1057#1055#1054#1056#1058' '#1042' '#1042#1054#1056#1044
-        OnClick = N6Click
+        OnClick = MENU_WORD_EXPORTClick
       end
     end
-    object N7: TMenuItem
+    object MENU_REPORT: TMenuItem
       Caption = #1054#1058#1063#1045#1058
+      OnClick = MENU_REPORTClick
     end
     object N8: TMenuItem
       Caption = #1044#1048#1040#1043#1056#1040#1052#1052#1040
