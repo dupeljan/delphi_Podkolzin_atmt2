@@ -43,6 +43,8 @@ type
     spDeleteDaily_income_item: TIBStoredProc;
     TDaily_income_item: TIBTable;
     qDaily_income_item_filtered: TIBQuery;
+    QLossWithPrice: TIBQuery;
+    QDaily_incomeWithPrice: TIBQuery;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
     procedure update_all;
@@ -84,6 +86,8 @@ begin
   dm.TDaily_income.Close;
   dm.TDaily_income_item.Close;
   dm.qDaily_income_item_filtered.Close;
+  dm.QDaily_incomeWithPrice.Close;
+  dm.QLossWithPrice.Close;
 
   DM.TProvider.Open;
   DM.TProduct.Open;
@@ -97,6 +101,8 @@ begin
   dm.TDaily_income.Open;
   dm.TDaily_income_item.Open;
   dm.qDaily_income_item_filtered.Open;
+  dm.QDaily_incomeWithPrice.Open;
+  dm.QLossWithPrice.Open;
 end;
 
 

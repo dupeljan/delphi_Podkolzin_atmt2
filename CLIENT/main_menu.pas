@@ -76,14 +76,14 @@ begin
 
     1: begin
       id :=   dm.TLoss.FieldByName('ID').Value;
-      dm.qLoss_item_filtered.ParamByName('in_loss_id').Value:= id;
-      DataSource_inv_item.DataSet := dm.qLoss_item_filtered;
+      dm.QLossWithPrice.ParamByName('in_loss_id').Value:= id;
+      DataSource_inv_item.DataSet := dm.QLossWithPrice;
     end;
 
     2: begin
       id := dm.TDaily_income.FieldByName('ID').Value;
-      dm.qDaily_income_item_filtered.ParamByName('in_daily_income_id').Value:= id;
-      DataSource_inv_item.DataSet := dm.qDaily_income_item_filtered;
+      dm.QDaily_incomeWithPrice.ParamByName('in_daily_income_id').Value:= id;
+      DataSource_inv_item.DataSet := dm.QDaily_incomeWithPrice;
     end;
   end;
   dm.update_all;

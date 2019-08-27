@@ -587,4 +587,66 @@ object dm: Tdm
         ParamType = ptInput
       end>
   end
+  object QLossWithPrice: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select loss_item.id as loss_item_id,'
+      '       loss_id,'
+      '       product_id,provider_id,product_count,'
+      '       product.name as product_name,'
+      '       provider.name as provider_name,'
+      '       price(product_id,the_date)'
+      'from'
+      'loss_item'
+      'join'
+      'product on loss_item.product_id = product.id'
+      'join'
+      'provider on provider.id = provider_id'
+      'join'
+      'loss on loss.id = loss_id'
+      'where loss_id = :in_loss_id;')
+    Left = 400
+    Top = 56
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'in_loss_id'
+        ParamType = ptInput
+      end>
+  end
+  object QDaily_incomeWithPrice: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select daily_income_item.id as daily_income_item_id,'
+      '       daily_income_id,'
+      '       product_id,provider_id,product_count,'
+      '       product.name as product_name,'
+      '       provider.name as provider_name,'
+      '       price(product_id,the_date)'
+      'from'
+      'daily_income_item'
+      'join'
+      'product on daily_income_item.product_id = product.id'
+      'join'
+      'provider on provider.id = provider_id'
+      'join'
+      'daily_income on daily_income.id = daily_income_id'
+      'where daily_income_id = :in_daily_income_id;')
+    Left = 496
+    Top = 56
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'in_daily_income_id'
+        ParamType = ptInput
+      end>
+  end
 end
