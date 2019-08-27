@@ -19,7 +19,7 @@ type
     MENU_DELETE_INV: TMenuItem;
     MENU_WORD_EXPORT: TMenuItem;
     MENU_REPORT: TMenuItem;
-    N8: TMenuItem;
+    DIAGRAM_MENU: TMenuItem;
     DBGrid_inv: TDBGrid;
     DBGrid_inv_item: TDBGrid;
     DataSource_inv: TDataSource;
@@ -36,6 +36,7 @@ type
     procedure MENU_DELETE_INVClick(Sender: TObject);
     procedure MENU_WORD_EXPORTClick(Sender: TObject);
     procedure MENU_REPORTClick(Sender: TObject);
+    procedure DIAGRAM_MENUClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -50,7 +51,8 @@ implementation
 {$R *.dfm}
 
 uses provider_window, product_window, inv_window, loss_window,
-  daily_income_window, data_moudule, WordExelReport, exel_input_window;
+  daily_income_window, data_moudule, WordExelReport, exel_input_window,
+  diagram_window;
 
 procedure TMAIN_MENU_FORM.ComboBox_invChange(Sender: TObject);
 begin
@@ -62,6 +64,8 @@ begin
 
   dm.update_all
 end;
+
+
 
 procedure TMAIN_MENU_FORM.DBGrid_invCellClick(Column: TColumn);
 var id : integer;
@@ -94,6 +98,11 @@ begin
   1: dm.TLoss.Locate('ID',id,[]);
   2: dm.TDaily_income.Locate('ID',id,[]);
   end;
+end;
+
+procedure TMAIN_MENU_FORM.DIAGRAM_MENUClick(Sender: TObject);
+begin
+   DIAGRAM_FORM.showmodal;
 end;
 
 procedure TMAIN_MENU_FORM.FormCreate(Sender: TObject);

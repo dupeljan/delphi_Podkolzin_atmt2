@@ -15,7 +15,8 @@ uses
   daily_income_window in 'daily_income_window.pas' {DAILY_INCOME_FORM},
   WordExelReport in 'WordExelReport.pas',
   exel_input_window in 'exel_input_window.pas' {EXEL_INPUT_FORM},
-  choose_provider_window in 'choose_provider_window.pas' {CHOOSE_PROVIDER_FORM};
+  choose_provider_window in 'choose_provider_window.pas' {CHOOSE_PROVIDER_FORM},
+  diagram_window in 'diagram_window.pas' {DIAGRAM_FORM};
 
 {$R *.res}
 
@@ -35,5 +36,6 @@ begin
   Application.CreateForm(TDAILY_INCOME_FORM, DAILY_INCOME_FORM);
   Application.CreateForm(TEXEL_INPUT_FORM, EXEL_INPUT_FORM);
   Application.CreateForm(TCHOOSE_PROVIDER_FORM, CHOOSE_PROVIDER_FORM);
+  Application.CreateForm(TDIAGRAM_FORM, DIAGRAM_FORM);
   Application.Run;
 end.

@@ -849,4 +849,67 @@ object dm: Tdm
         ParamType = ptInput
       end>
   end
+  object qGet_global_period_daily_income: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      
+        'select the_date as THE_DATE , sum( (select out_price from get_pr' +
+        'ice(product_id,the_date)) ) as PRICE'
+      'from'
+      
+        'daily_income join daily_income_item on daily_income.id = daily_i' +
+        'ncome_id'
+      'where'
+      'datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
+      'AND'
+      'datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0'
+      'group by the_date')
+    Left = 288
+    Top = 1112
+    ParamData = <
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_BEGIN_DATE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_END_DATE'
+        ParamType = ptInput
+      end>
+  end
+  object qGet_global_period_loss: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      
+        'select the_date as THE_DATE , sum( (select out_price from get_pr' +
+        'ice(product_id,the_date)) ) as PRICE'
+      'from loss  join loss_item on loss.id = loss_item.id'
+      'where'
+      'datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
+      'AND'
+      'datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0'
+      'group by the_date')
+    Left = 432
+    Top = 1120
+    ParamData = <
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_BEGIN_DATE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_END_DATE'
+        ParamType = ptInput
+      end>
+  end
 end

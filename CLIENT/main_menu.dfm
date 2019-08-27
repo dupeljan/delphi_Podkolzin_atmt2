@@ -136,8 +136,9 @@ object MAIN_MENU_FORM: TMAIN_MENU_FORM
       Caption = #1054#1058#1063#1045#1058
       OnClick = MENU_REPORTClick
     end
-    object N8: TMenuItem
+    object DIAGRAM_MENU: TMenuItem
       Caption = #1044#1048#1040#1043#1056#1040#1052#1052#1040
+      OnClick = DIAGRAM_MENUClick
     end
   end
   object DataSource_inv: TDataSource
