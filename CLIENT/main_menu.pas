@@ -34,6 +34,7 @@ type
     procedure ComboBox_invChange(Sender: TObject);
     procedure DBGrid_invCellClick(Column: TColumn);
     procedure MENU_DELETE_INVClick(Sender: TObject);
+    procedure N6Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -48,7 +49,7 @@ implementation
 {$R *.dfm}
 
 uses provider_window, product_window, inv_window, loss_window,
-  daily_income_window, data_moudule;
+  daily_income_window, data_moudule, WordExelReport;
 
 procedure TMAIN_MENU_FORM.ComboBox_invChange(Sender: TObject);
 begin
@@ -187,6 +188,16 @@ end;
 procedure TMAIN_MENU_FORM.MENU_PURCHASE_INV_ADDClick(Sender: TObject);
 begin
    INV_FORM.ShowModal;
+end;
+
+procedure TMAIN_MENU_FORM.N6Click(Sender: TObject);
+begin
+  case ComboBox_inv.ItemIndex of
+  0: create_invoice;
+  1: create_loss;
+  2: create_daily_income;
+  end;
+
 end;
 
 end.

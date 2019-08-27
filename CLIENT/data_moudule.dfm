@@ -302,7 +302,7 @@ object dm: Tdm
       'join'
       'provider on provider.id = provider_id'
       'where purchase_inv_id = :in_purchase_id ;')
-    Left = 432
+    Left = 440
     Top = 384
     ParamData = <
       item
@@ -640,8 +640,8 @@ object dm: Tdm
       'join'
       'daily_income on daily_income.id = daily_income_id'
       'where daily_income_id = :in_daily_income_id;')
-    Left = 496
-    Top = 56
+    Left = 512
+    Top = 64
     ParamData = <
       item
         DataType = ftInteger

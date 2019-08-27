@@ -135,6 +135,7 @@
             <Form>DAILY_INCOME_FORM</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="WordExelReport.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

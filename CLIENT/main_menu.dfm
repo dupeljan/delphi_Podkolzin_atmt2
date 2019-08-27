@@ -129,6 +129,7 @@ object MAIN_MENU_FORM: TMAIN_MENU_FORM
       end
       object N6: TMenuItem
         Caption = #1069#1050#1057#1055#1054#1056#1058' '#1042' '#1042#1054#1056#1044
+        OnClick = N6Click
       end
     end
     object N7: TMenuItem

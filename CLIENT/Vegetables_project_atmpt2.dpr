@@ -12,7 +12,8 @@ uses
   inv_item_add_price_window in 'inv_item_add_price_window.pas' {INVOICE_ITEM_ADD_PRICE_FORM},
   inv_item_add_window in 'inv_item_add_window.pas' {INVOICE_ITEM_ADD_FORM},
   loss_window in 'loss_window.pas' {LOSS_FORM},
-  daily_income_window in 'daily_income_window.pas' {DAILY_INCOME_FORM};
+  daily_income_window in 'daily_income_window.pas' {DAILY_INCOME_FORM},
+  WordExelReport in 'WordExelReport.pas';
 
 {$R *.res}
 
