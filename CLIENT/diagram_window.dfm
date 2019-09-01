@@ -3,7 +3,7 @@ object DIAGRAM_FORM: TDIAGRAM_FORM
   Top = 0
   Caption = #1044#1048#1040#1043#1056#1040#1052#1052#1040
   ClientHeight = 845
-  ClientWidth = 762
+  ClientWidth = 861
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -36,26 +36,26 @@ object DIAGRAM_FORM: TDIAGRAM_FORM
   end
   object Image_daily_income: TImage
     Left = 334
-    Top = 208
-    Width = 401
-    Height = 217
+    Top = 184
+    Width = 519
+    Height = 281
   end
   object Image_loss: TImage
-    Left = 334
-    Top = 457
-    Width = 387
-    Height = 248
+    Left = 346
+    Top = 485
+    Width = 507
+    Height = 292
   end
   object Label4: TLabel
-    Left = 320
-    Top = 432
+    Left = 309
+    Top = 466
     Width = 56
     Height = 13
     Caption = #1057#1055#1048#1057#1040#1053#1048#1071
   end
   object Label5: TLabel
     Left = 312
-    Top = 176
+    Top = 149
     Width = 53
     Height = 13
     Caption = #1055#1056#1054#1044#1040#1046#1048
@@ -89,7 +89,7 @@ object DIAGRAM_FORM: TDIAGRAM_FORM
   end
   object DBGrid1: TDBGrid
     Left = 8
-    Top = 208
+    Top = 184
     Width = 320
     Height = 120
     DataSource = DataSource1
@@ -115,7 +115,7 @@ object DIAGRAM_FORM: TDIAGRAM_FORM
   end
   object DBGrid2: TDBGrid
     Left = 8
-    Top = 464
+    Top = 485
     Width = 320
     Height = 120
     DataSource = DataSource2
@@ -134,7 +134,7 @@ object DIAGRAM_FORM: TDIAGRAM_FORM
       end
       item
         Expanded = False
-        FieldName = 'THE_DATE'
+        FieldName = 'PRICE'
         Title.Caption = #1062#1045#1053#1040
         Visible = True
       end>

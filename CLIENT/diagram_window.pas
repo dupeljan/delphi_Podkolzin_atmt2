@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs,data_moudule, Data.DB, Vcl.StdCtrls,
-  Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.Grids, Vcl.DBGrids;
+  Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.Grids, Vcl.DBGrids,IBX.IBQuery;
 
 type
   TDIAGRAM_FORM = class(TForm)
@@ -28,6 +28,9 @@ type
     { Private declarations }
     procedure draw_daily_income;
     procedure draw_loss;
+    procedure draw( table :TIBQuery;img : TImage);
+    procedure draw_coords_loss(margin : extended);
+    procedure draw_coords_daily_income(margin : extended);
   public
     { Public declarations }
   end;
@@ -75,15 +78,83 @@ begin
 
 end;
 
-procedure TDIAGRAM_FORM.draw_daily_income;
-var max, h,w, record_count,i ,x ,y, price : integer;
+function max_elem(table : TIBQuery) : integer;
+var count,i,max : integer;
+begin
+   table.last;
+   count := table.RecordCount;
+   table.First;
+
+   max := 0;
+   for I := 0 to count - 1 do begin
+      if max < table.FieldByName('PRICE').AsInteger then
+        max := table.FieldByName('PRICE').AsInteger;
+      table.next;
+   end;
+
+   result := max;
+
+end;
+procedure TDIAGRAM_FORM.draw( table :TIBQuery;img : TImage);
+var max, h,w, record_count,i ,x ,y, price, rect_side : integer;
 margin : extended;
 begin
+  img := nil;
   margin := 0.1;
+
+   max := max_elem(table);
+   h := img.Height;
+   w := img.Width;
+   rect_side := 10;
+
+   table.last;
+   record_count := table.RecordCount;
+
+   if record_count <> 0 then begin
+        // begin to draw
+        table.First;
+        price := table.FieldByName('PRICE').asInteger;
+
+       if record_count = 1 then
+       begin
+          y := round( margin * h + (1 - price / max) * h * (1 - 2 * margin));
+          x := round( w / 2) ;
+          img.Canvas.Brush.Color := clBlack;
+          img.Canvas.Rectangle(x - (rect_side div 2),y - (rect_side div 2),
+          x + (rect_side div 2),y + (rect_side div 2) );
+          img.Canvas.Pixels[x,y] := clBlack;
+       end
+       else
+       for I := 0 to record_count - 1 do begin
+
+          y := round( margin * h + (1 - price / max) * h * (1 - 2 * margin));
+          x := round( margin * w + i * ( ( w * ( 1 - 2 * margin) ) / (record_count-1) ) );
+          if i = 0 then
+            img.Canvas.MoveTo(x,y)
+          else
+            img.Canvas.LineTo(x,y);
+          table.Next;
+          price := table.FieldByName('PRICE').asInteger;
+       end;
+
+   end;
+
+end;
+
+procedure TDIAGRAM_FORM.draw_daily_income;
+var max, h,w, record_count,i ,x ,y, price, rect_side : integer;
+margin : extended;
+begin
+  image_daily_income.Picture := nil;
+
+  margin := 0.15;
 
    max := max_daily_income;
    h := Image_daily_income.Height;
    w := Image_daily_income.Width;
+   rect_side := 5;
+
+   draw_coords_daily_income(margin);
 
    dm.qGet_global_period_daily_income.last;
    record_count := dm.qGet_global_period_daily_income.RecordCount;
@@ -91,17 +162,34 @@ begin
    if record_count <> 0 then begin
         // begin to draw
         dm.qGet_global_period_daily_income.First;
+        price := dm.qGet_global_period_daily_income.FieldByName('PRICE').asInteger;
 
-
-       for I := 0 to record_count - 1 do begin
-          price := dm.qGet_global_period_daily_income.FieldByName('PRICE').asInteger;
+       if record_count = 1 then
+       begin
           y := round( margin * h + (1 - price / max) * h * (1 - 2 * margin));
-          x := round( margin * w + ( ( w * ( 1 - 2 * margin) ) / (record_count-1) ) * i );
+          x := round( w / 2) ;
+          Image_daily_income.Canvas.Brush.Color := clBlack;
+          Image_daily_income.Canvas.Rectangle(x - (rect_side div 2),y - (rect_side div 2),
+          x + (rect_side div 2),y + (rect_side div 2) );
+          Image_daily_income.Canvas.Pixels[x,y] := clBlack;
+       end
+       else
+       for I := 0 to record_count - 1 do begin
+
+          y := round( margin * h + (1 - price / max) * h * (1 - 2 * margin));
+          x := round( margin * w + i * ( ( w * ( 1 - 2 * margin) ) / (record_count-1) ) );
+
+          // draw rect
+          Image_daily_income.Canvas.Brush.Color := clBlack;
+          Image_daily_income.Canvas.Rectangle(x - (rect_side div 2),y - (rect_side div 2),
+          x + (rect_side div 2),y + (rect_side div 2) );
+
           if i = 0 then
             Image_daily_income.Canvas.MoveTo(x,y)
           else
             Image_daily_income.Canvas.LineTo(x,y);
           dm.qGet_global_period_daily_income.Next;
+          price := dm.qGet_global_period_daily_income.FieldByName('PRICE').asInteger;
        end;
 
    end;
@@ -109,38 +197,192 @@ begin
 end;
 
 procedure TDIAGRAM_FORM.draw_loss;
-var max, h,w, record_count,i ,x ,y, price : integer;
+var max, h,w, record_count,i ,x ,y, price,rect_side : integer;
 margin : extended;
 begin
-  margin := 0.1;
+  image_loss.Picture := nil;
+  margin := 0.15;
 
    max := max_loss;
    h := Image_loss.Height;
    w := Image_loss.Width;
+   rect_side := 5;
+
+   draw_coords_loss(margin);
 
    dm.qGet_global_period_loss.last;
    record_count := dm.qGet_global_period_loss.RecordCount;
 
+
    if record_count <> 0 then begin
       // begin to draw
        dm.qGet_global_period_loss.First;
-
-
-       for I := 0 to record_count - 1 do begin
-          price := dm.qGet_global_period_loss.FieldByName('PRICE').asInteger;
+       price := dm.qGet_global_period_loss.FieldByName('PRICE').asInteger;
+       if record_count = 1 then
+       begin
           y := round( margin * h + (1 - price / max) * h * (1 - 2 * margin));
-          x := round( margin * w + ( ( w * ( 1 - 2 * margin) ) / (record_count-1) ) * i );
+          x := round( w / 2) ;
+          Image_loss.Canvas.Brush.Color := clBlack;
+          Image_loss.Canvas.Rectangle(x - (rect_side div 2),y - (rect_side div 2),
+          x + (rect_side div 2),y + (rect_side div 2) );
+          Image_loss.Canvas.Pixels[x,y] := clBlack;
+       end
+       else
+       for I := 0 to record_count - 1 do begin
+
+          y := round( margin * h + (1 - price / max) * h * (1 - 2 * margin));
+          x := round( margin * w + i * ( ( w * ( 1 - 2 * margin) ) / (record_count-1) )  );
+
+          // draw rect
+          Image_loss.Canvas.Brush.Color := clBlack;
+          Image_loss.Canvas.Rectangle(x - (rect_side div 2),y - (rect_side div 2),
+          x + (rect_side div 2),y + (rect_side div 2) );
+
           if i = 0 then
             Image_loss.Canvas.MoveTo(x,y)
           else
             Image_loss.Canvas.LineTo(x,y);
           dm.qGet_global_period_loss.Next;
+          price := dm.qGet_global_period_loss.FieldByName('PRICE').asInteger;
        end;
    end;
 
 
 
 end;
+
+ procedure TDIAGRAM_FORM.draw_coords_loss(margin: extended);
+ var max, h,w, record_count,i ,x ,y, price,rect_side, noth_len, text_h : integer;
+  cur_date : TDate;
+  coord_margin : extended;
+ begin
+  max := max_loss;
+   h := Image_loss.Height;
+   w := Image_loss.Width;
+   rect_side := 10;
+   noth_len := 10;
+   text_h := 10;
+   coord_margin := margin * (2/3);
+
+   // draw coords lines
+   Image_loss.Canvas.MoveTo(round(coord_margin*w),0);
+   Image_loss.Canvas.LineTo(round(coord_margin*w),h);
+   Image_loss.Canvas.MoveTo(0,round(h*(1-coord_margin)));
+   Image_loss.Canvas.LineTo(w,round(h*(1-coord_margin)));
+
+   dm.qGet_global_period_loss.last;
+   record_count := dm.qGet_global_period_loss.RecordCount;
+
+
+   if record_count <> 0 then begin
+        // begin to draw
+         dm.qGet_global_period_loss.First;
+         price := dm.qGet_global_period_loss.FieldByName('PRICE').asInteger;
+         cur_date := dm.qGet_global_period_loss.FieldByName('THE_DATE').value;
+         if record_count = 1 then
+         begin
+            y := round( margin * h + (1 - price / max) * h * (1 - 2 * margin));
+            x := round( w / 2) ;
+
+            // draw date
+            Image_loss.Canvas.MoveTo(x,round(h-coord_margin*h-noth_len));
+            Image_loss.Canvas.LineTo(x,round(h-coord_margin*h+noth_len));
+            Image_loss.Canvas.TextOut(round(x-noth_len * 2.5),round(h-coord_margin*h+text_h),dateToStr(cur_date));
+            // draw price
+            Image_loss.Canvas.MoveTo(round(coord_margin*w-noth_len),y);
+            Image_loss.Canvas.LineTo(round(coord_margin*w+noth_len),y);
+            Image_loss.Canvas.TextOut(round(coord_margin*w-text_h*1.5),y-text_h,intToStr(price));
+
+
+         end
+         else
+         for I := 0 to record_count - 1 do begin
+
+            y := round( margin * h + (1 - price / max) * h * (1 - 2 * margin));
+            x := round( margin * w + i * ( ( w * ( 1 - 2 * margin) ) / (record_count-1) )  );
+
+            // draw date
+            Image_loss.Canvas.MoveTo(x,round(h-coord_margin*h-noth_len));
+            Image_loss.Canvas.LineTo(x,round(h-coord_margin*h+noth_len));
+            Image_loss.Canvas.TextOut(round(x-noth_len * 2.5),round(h-coord_margin*h+text_h),dateToStr(cur_date));
+            // draw price
+            Image_loss.Canvas.MoveTo(round(coord_margin*w-noth_len),y);
+            Image_loss.Canvas.LineTo(round(coord_margin*w+noth_len),y);
+            Image_loss.Canvas.TextOut(round(coord_margin*w-text_h*1.5),y-text_h,intToStr(price));
+
+            dm.qGet_global_period_loss.Next;
+            price := dm.qGet_global_period_loss.FieldByName('PRICE').asInteger;
+            cur_date := dm.qGet_global_period_loss.FieldByName('THE_DATE').value;
+         end;
+   end;
+ end;
+
+ procedure TDIAGRAM_FORM.draw_coords_daily_income(margin: extended);
+ var max, h,w, record_count,i ,x ,y, price,rect_side, noth_len, text_h : integer;
+  cur_date : TDate;
+  coord_margin : extended;
+ begin
+  max := max_daily_income;
+   h := Image_daily_income.Height;
+   w := Image_daily_income.Width;
+   rect_side := 10;
+   noth_len := 10;
+   text_h := 10;
+   coord_margin := margin * (2/3);
+
+   // draw coords lines
+   Image_daily_income.Canvas.MoveTo(round(coord_margin*w),0);
+   Image_daily_income.Canvas.LineTo(round(coord_margin*w),h);
+   Image_daily_income.Canvas.MoveTo(0,round(h*(1-coord_margin)));
+   Image_daily_income.Canvas.LineTo(w,round(h*(1-coord_margin)));
+
+   dm.qGet_global_period_daily_income.last;
+   record_count := dm.qGet_global_period_daily_income.RecordCount;
+
+
+   if record_count <> 0 then begin
+        // begin to draw
+         dm.qGet_global_period_daily_income.First;
+         price := dm.qGet_global_period_daily_income.FieldByName('PRICE').asInteger;
+         cur_date := dm.qGet_global_period_daily_income.FieldByName('THE_DATE').value;
+         if record_count = 1 then
+         begin
+            y := round( margin * h + (1 - price / max) * h * (1 - 2 * margin));
+            x := round( w / 2) ;
+
+            // draw date
+            Image_daily_income.Canvas.MoveTo(x,round(h-coord_margin*h-noth_len));
+            Image_daily_income.Canvas.LineTo(x,round(h-coord_margin*h+noth_len));
+            Image_daily_income.Canvas.TextOut(round(x-noth_len * 2.5),round(h-coord_margin*h+text_h),dateToStr(cur_date));
+            // draw price
+            Image_daily_income.Canvas.MoveTo(round(coord_margin*w-noth_len),y);
+            Image_daily_income.Canvas.LineTo(round(coord_margin*w+noth_len),y);
+            Image_daily_income.Canvas.TextOut(round(coord_margin*w-text_h*1.5),y-text_h,intToStr(price));
+
+
+         end
+         else
+         for I := 0 to record_count - 1 do begin
+
+            y := round( margin * h + (1 - price / max) * h * (1 - 2 * margin));
+            x := round( margin * w + i * ( ( w * ( 1 - 2 * margin) ) / (record_count-1) )  );
+
+            // draw date
+            Image_daily_income.Canvas.MoveTo(x,round(h-coord_margin*h-noth_len));
+            Image_daily_income.Canvas.LineTo(x,round(h-coord_margin*h+noth_len));
+            Image_daily_income.Canvas.TextOut(round(x-noth_len * 2.5),round(h-coord_margin*h+text_h),dateToStr(cur_date));
+            // draw price
+            Image_daily_income.Canvas.MoveTo(round(coord_margin*w-noth_len),y);
+            Image_daily_income.Canvas.LineTo(round(coord_margin*w+noth_len),y);
+            Image_daily_income.Canvas.TextOut(round(coord_margin*w-text_h*1.5),y-text_h,intToStr(price));
+
+            dm.qGet_global_period_daily_income.Next;
+            price := dm.qGet_global_period_daily_income.FieldByName('PRICE').asInteger;
+            cur_date := dm.qGet_global_period_daily_income.FieldByName('THE_DATE').value;
+         end;
+   end;
+ end;
+
 
 procedure TDIAGRAM_FORM.Button_updateClick(Sender: TObject);
 begin
@@ -156,10 +398,9 @@ begin
   DateTimePicker_To.Date;
   // update all
   dm.update_all;
-  // draw
-  Image_daily_income.picture:= nil;
+  // draw daily_income
   draw_daily_income;
-  Image_loss.Picture := nil;
+   // draw loss
   draw_loss;
 
 
