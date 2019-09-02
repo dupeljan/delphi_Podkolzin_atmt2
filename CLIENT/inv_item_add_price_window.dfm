@@ -94,6 +94,15 @@ object INVOICE_ITEM_ADD_PRICE_FORM: TINVOICE_ITEM_ADD_PRICE_FORM
     NumGlyphs = 2
     TabOrder = 3
   end
+  object Button_new_product: TButton
+    Left = 224
+    Top = 168
+    Width = 145
+    Height = 25
+    Caption = #1044#1054#1041#1040#1042#1048#1058#1068' '#1053#1054#1042#1067#1049' '#1058#1054#1042#1040#1056
+    TabOrder = 4
+    OnClick = Button_new_productClick
+  end
   object DataSource1: TDataSource
     DataSet = dm.qProductWithProvider
     Left = 248
