@@ -776,20 +776,28 @@ object dm: Tdm
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
+      'select'
+      '    the_date,'
+      '    sum(price_ * product_count)as PRICE'
+      'from '
+      '('
+      '    select'
+      '        the_date as THE_DATE,'
+      '        price(product_id,the_date) as price_,'
+      '        product_count'
+      '    from'
       
-        'select the_date as THE_DATE , sum( (select out_price from get_pr' +
-        'ice(product_id,the_date)) ) as PRICE'
-      'from'
+        '    daily_income join daily_income_item on daily_income.id = dai' +
+        'ly_income_id'
+      '    where'
       
-        'daily_income join daily_income_item on daily_income.id = daily_i' +
-        'ncome_id'
-      
-        'where product_id in (select id from product where provider_id = ' +
-        ':IN_PROVIDER_ID)'
-      'AND'
-      'datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
-      'AND'
-      'datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0'
+        '    product_id in (select id from product where provider_id = :I' +
+        'N_PROVIDER_ID)'
+      '    AND'
+      '    datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
+      '    AND'
+      '    datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0'
+      ')'
       'group by the_date')
     Left = 296
     Top = 1032
@@ -817,17 +825,26 @@ object dm: Tdm
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
+      'select'
+      '    the_date,'
+      '    sum(price_ * product_count)as PRICE'
+      'from '
+      '('
+      '    select'
+      '        the_date as THE_DATE,'
+      '        price(product_id,the_date) as price_,'
+      '        product_count'
+      '    from'
+      '    loss join loss_item on loss.id = loss_id'
+      '    where'
       
-        'select the_date as THE_DATE , sum( (select out_price from get_pr' +
-        'ice(product_id,the_date)) ) as PRICE'
-      'from loss  join loss_item on loss.id = loss_item.id'
-      
-        'where product_id in (select  id from product where provider_id =' +
-        ' :IN_PROVIDER_ID)'
-      'AND'
-      'datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
-      'AND'
-      'datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0'
+        '    product_id in (select  id from product where provider_id = :' +
+        'IN_PROVIDER_ID)'
+      '    AND'
+      '    datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
+      '    AND'
+      '    datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0'
+      ')'
       'group by the_date')
     Left = 416
     Top = 1032

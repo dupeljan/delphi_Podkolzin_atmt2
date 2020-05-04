@@ -1,4 +1,4 @@
 #!/bin/bash
 git add *
-git rm  -r CLIENT/__history
-git rm -r CLIENT/Win32
+git rm  -r -f CLIENT/__history
+git rm -r -f CLIENT/Win32

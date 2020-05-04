@@ -404,7 +404,7 @@ begin
 
       // Заполняем данные
       // Вычисляем продажи за период
-      dm.QGet_Period_Daily_income.ParamByName('IN_PROVIDER_ID').Value :=
+        dm.QGet_Period_Daily_income.ParamByName('IN_PROVIDER_ID').Value :=
       provider_id;
 
       dm.QGet_Period_Daily_income.ParamByName('IN_DATE_BEGIN_DATE').Value :=
