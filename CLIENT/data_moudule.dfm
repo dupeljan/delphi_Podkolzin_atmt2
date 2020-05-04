@@ -943,4 +943,65 @@ object dm: Tdm
         ParamType = ptInput
       end>
   end
+  object qPurchase_inv_item_filered_prov: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select purchase_inv_item.id as purchase_inv_item_id,'
+      '       purchase_inv_id,'
+      '       product_id,provider_id,product_count,price,'
+      '       product.name as product_name,'
+      '       provider.name as provider_name'
+      'from'
+      'purchase_inv_item'
+      'join'
+      'product on purchase_inv_item.product_id = product.id'
+      'join'
+      'provider on provider.id = provider_id'
+      'where purchase_inv_id = :in_purchase_id'
+      'and provider_id = :in_provider_id ;')
+    Left = 592
+    Top = 384
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'in_purchase_id'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'in_provider_id'
+        ParamType = ptInput
+      end>
+  end
+  object qPurchase_inv_item_only_povider: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select'
+      '      DISTINCT provider.id as provider_id,'
+      '      provider.name as provider_name'
+      ''
+      'from'
+      'purchase_inv_item'
+      'join'
+      'product on purchase_inv_item.product_id = product.id'
+      'join'
+      'provider on provider.id = provider_id'
+      'where purchase_inv_id = :in_purchase_id')
+    Left = 576
+    Top = 456
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'in_purchase_id'
+        ParamType = ptInput
+      end>
+  end
 end

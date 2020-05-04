@@ -9,8 +9,107 @@ procedure create_exel();
 implementation
 uses comObj, data_moudule,  sysutils,wordXP, excelXP,exel_input_window;
 
-procedure create_daily_income();
- var
+procedure create_invoice();
+var
+sheet: OleVariant;
+   Ap : Variant;
+   i,j ,sum,totalsum,price,id, shift,header, provider_count, product_count: integer;
+   the_date : TDate;
+   columnN : string;
+begin
+
+  Ap := CreateOleObject('Excel.Application');
+  sheet := Ap.Workbooks.Add;
+  shift := 2;
+  header := 1;
+  // setup id and data
+  id := dm.TPurchase_inv.FieldByName('ID').value;
+  the_date :=  dm.TPurchase_inv.FieldByName('THE_DATE').value;
+  // Get provider count
+  dm.qPurchase_inv_item_only_povider.ParamByName('in_purchase_id').Value
+  := id;
+
+  // update it
+  dm.qPurchase_inv_item_only_povider.close;
+  dm.qPurchase_inv_item_only_povider.Open;
+
+  // get providers count
+  dm.qPurchase_inv_item_only_povider.Last;
+  provider_count := dm.qPurchase_inv_item_only_povider.RecordCount;
+  dm.qPurchase_inv_item_only_povider.First;
+  // for each provider
+  for i := 0 to provider_count - 1 do
+  begin
+         Ap.Range['C' + inttostr(shift)] :=
+           'ТОВАРНО-ТРАНСПОРТНАЯ НАКЛАДНАЯ';
+         Ap.Range['B' + inttostr(shift + 1)] := 'Грузоотправитель';
+         Ap.Range['D' + inttostr(shift + 1)] :=
+          dm.qPurchase_inv_item_only_povider.FieldByName('PROVIDER_NAME').AsString;
+          //Ap.Range['B' + inttostr(shift + 2)] := 'Грузополучатель';
+          //Ap.Range['B' + inttostr(shift + 3)] := 'Плательщик';
+          columnN :=  inttostr(shift + header + 1);
+          Ap.Range['B' + columnN] := '№ товарной позиции';
+          Ap.Range['C' + columnN] :=  'Наименование товара';
+          Ap.Range['D' + columnN]  := 'Цена';
+          Ap.Range['E' + columnN]  := 'Количество';
+          Ap.Range['F' + columnN]  := 'Сумма';
+
+          // Get all products from purchase of this provider
+          dm.qPurchase_inv_item_filered_prov.
+              ParamByName('in_purchase_id').Value := id;
+          dm.qPurchase_inv_item_filered_prov.
+            ParamByName('in_provider_id').Value :=
+                dm.qPurchase_inv_item_only_povider.FieldByName('PROVIDER_ID').value;
+
+
+          with dm.qPurchase_inv_item_filered_prov do begin
+             // Update  qPurchase_inv_item_only_povider
+            close;
+            open;
+            last;
+            product_count :=  RecordCount;
+            first;
+
+              totalsum := 0;
+              for j := 2 to product_count + 1 do
+              begin
+                 columnN :=  inttostr(shift + j + header);
+                Ap.range['B' + columnN] :=  intToStr(j-1);
+                Ap.range['C' + columnN] :=
+                  FieldByName('PRODUCT_NAME').AsString;
+                Ap.range['D' + columnN] :=
+                  FieldByName('PRICE').AsString;
+                Ap.range['E' +columnN] :=
+                  FieldByName('PRODUCT_COUNT').AsString;
+
+                sum := FieldByName('PRICE').AsInteger;
+                sum := sum * FieldByName('PRODUCT_COUNT').Asinteger;
+                totalsum := totalsum + sum;
+                 Ap.range['F' + columnN] := intToStr(sum);
+
+                next;
+              end;
+          end;
+
+        // Add new list
+        if  i <> provider_count - 1 then
+        sheet.WorkSheets.Add;
+
+        // Go to the next provider
+        dm.qPurchase_inv_item_only_povider.Next;
+  end;
+
+
+
+
+
+
+
+  Ap.DisplayAlerts := False;
+  Ap.Visible := True;
+
+end;
+ {var
  title,text : string;
  MS_Word: Variant;
  i,j ,sum,totalsum,price,id: integer;
@@ -84,161 +183,18 @@ begin
   end;
 
 end;
-
+  }
 
 procedure create_loss();
- var
- title,text : string;
- MS_Word: Variant;
- i,j ,sum,totalsum,price,id: integer;
- the_date : TDate;
 begin
-      // Get loss info
-      id := dm.TLoss.FieldByName('ID').value;
-      the_date :=  dm.TLoss.FieldByName('THE_DATE').value;
-     dm.QLossWithPrice.ParamByName('in_loss_id').value := id;
-
-     dm.update_all;
-
-     dm.TLoss.Locate('ID',id,[]);
-     dm.QLossWithPrice.Last;
-
-
-    try
-    MS_Word:=CreateOleObject('Word.Application');
-    MS_Word.Visible:=true;
-    MS_Word.Documents.Add;
-    MS_Word.Selection.Start:=20;
-
-    MS_Word.ActiveDocument.Range.InsertAfter('  ТОВАРНЫЙ ЧЕК ОТ ' + dateToStr(date));
-    MS_Word.ActiveDocument.Range.InsertAfter(#13#10);
-
-    MS_Word.ActiveDocument.Tables.Add(
-     MS_Word.ActiveDocument.Range.Characters.Last,dm.QLossWithPrice.RecordCount+1,6);
-
-    MS_Word.ActiveDocument.Tables.Item(1).Borders.InsideLineStyle:=wdLineStyleSingle;
-    MS_Word.ActiveDocument.Tables.Item(1).Borders.OutsideLineStyle:=wdLineStyleSingle;
-
-
-
-    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,1).Range.Text:='№ товарной позиции';
-    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,2).Range.Text:='Наименование товара';
-    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,3).Range.Text:='Производитель';
-    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,4).Range.Text:='Цена';
-    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,5).Range.Text:='Количество';
-    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,6).Range.Text:='Сумма';
-
-    dm.QLossWithPrice.first;
-
-    totalsum := 0;
-    for i := 2 to dm.QLossWithPrice.RecordCount+1 do
-    begin
-
-
-
-      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,1).Range.Text:= intToStr(i-1);
-      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,2).Range.Text:=dm.QLossWithPrice.FieldByName('PRODUCT_NAME').AsString;
-      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,3).Range.Text:=dm.QLossWithPrice.FieldByName('PROVIDER_NAME').AsString;
-      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,4).Range.Text:= dm.QLossWithPrice.FieldByName('PRICE').AsString;
-      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,5).Range.Text:=dm.QLossWithPrice.FieldByName('PRODUCT_COUNT').AsString;
-
-      sum := dm.QLossWithPrice.FieldByName('PRICE').AsInteger;
-      sum := sum * dm.QLossWithPrice.FieldByName('PRODUCT_COUNT').Asinteger;
-      totalsum := totalsum + sum;
-      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,6).Range.Text:= intToStr(sum);
-
-      dm.QLossWithPrice.next;
-    end;
-
-    MS_Word.ActiveDocument.Range.InsertAfter(' ИТОГО  ' + inttostr(totalsum) + ' руб.');
-    MS_Word.ActiveDocument.Range.InsertAfter(#13#10);
-
-    MS_Word.Visible:=true;
-    MS_Word.DisplayAlerts := False;
-  except
-    MS_Word.DisplayAlerts := False;
-    MS_Word.Quit;
-  end;
 
 end;
 
 
-procedure create_invoice();
-var
- title,text : string;
- MS_Word: Variant;
- i,j ,sum,totalsum,price,id: integer;
- the_date : TDate;
+procedure create_daily_income();
 begin
-      // Get loss info
-      id := dm.TPurchase_inv.FieldByName('ID').value;
-      the_date :=  dm.TPurchase_inv.FieldByName('THE_DATE').value;
-     dm.qPurchase_inv_item_filtered.ParamByName('in_purchase_id').value := id;
-
-     dm.update_all;
-
-     dm.TPurchase_inv.Locate('ID',id,[]);
-     dm.qPurchase_inv_item_filtered.Last;
-
-
-    try
-    MS_Word:=CreateOleObject('Word.Application');
-    MS_Word.Visible:=true;
-    MS_Word.Documents.Add;
-    MS_Word.Selection.Start:=20;
-
-    MS_Word.ActiveDocument.Range.InsertAfter('  ТОВАРНЫЙ ЧЕК ОТ ' + dateToStr(date));
-    MS_Word.ActiveDocument.Range.InsertAfter(#13#10);
-
-    MS_Word.ActiveDocument.Tables.Add(
-     MS_Word.ActiveDocument.Range.Characters.Last,dm.qPurchase_inv_item_filtered.RecordCount+1,6);
-
-    MS_Word.ActiveDocument.Tables.Item(1).Borders.InsideLineStyle:=wdLineStyleSingle;
-    MS_Word.ActiveDocument.Tables.Item(1).Borders.OutsideLineStyle:=wdLineStyleSingle;
-
-
-
-    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,1).Range.Text:='№ товарной позиции';
-    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,2).Range.Text:='Наименование товара';
-    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,3).Range.Text:='Производитель';
-    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,4).Range.Text:='Цена';
-    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,5).Range.Text:='Количество';
-    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,6).Range.Text:='Сумма';
-
-    dm.qPurchase_inv_item_filtered.first;
-
-    totalsum := 0;
-    for i := 2 to dm.qPurchase_inv_item_filtered.RecordCount+1 do
-    begin
-
-
-
-      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,1).Range.Text:= intToStr(i-1);
-      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,2).Range.Text:=dm.qPurchase_inv_item_filtered.FieldByName('PRODUCT_NAME').AsString;
-      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,3).Range.Text:=dm.qPurchase_inv_item_filtered.FieldByName('PROVIDER_NAME').AsString;
-      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,4).Range.Text:= dm.qPurchase_inv_item_filtered.FieldByName('PRICE').AsString;
-      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,5).Range.Text:=dm.qPurchase_inv_item_filtered.FieldByName('PRODUCT_COUNT').AsString;
-
-      sum := dm.qPurchase_inv_item_filtered.FieldByName('PRICE').AsInteger;
-      sum := sum * dm.qPurchase_inv_item_filtered.FieldByName('PRODUCT_COUNT').Asinteger;
-      totalsum := totalsum + sum;
-      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,6).Range.Text:= intToStr(sum);
-
-      dm.qPurchase_inv_item_filtered.next;
-    end;
-
-    MS_Word.ActiveDocument.Range.InsertAfter(' ИТОГО  ' + inttostr(totalsum) + ' руб.');
-    MS_Word.ActiveDocument.Range.InsertAfter(#13#10);
-
-    MS_Word.Visible:=true;
-    MS_Word.DisplayAlerts := False;
-  except
-    MS_Word.DisplayAlerts := False;
-    MS_Word.Quit;
-  end;
 
 end;
-
 
 
 
