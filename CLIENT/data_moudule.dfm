@@ -7,8 +7,8 @@ object dm: Tdm
   object my_database: TIBDatabase
     Connected = True
     DatabaseName = 
-      'C:\Users\dupel\OneDrive\'#1056#1072#1073#1086#1095#1080#1081' '#1089#1090#1086#1083'\DELPHI '#1047#1040#1063#1045#1058' ATTEMPT 2\DB\V' +
-      'EGETABLES_DB.FDB'
+      'C:\Users\dupel\delphi0520\delphi_Podkolzin_atmt2\DB\VEGETABLES_D' +
+      'B.FDB'
     Params.Strings = (
       'user_name=SYSDBA'
       'password=masterkey')
@@ -19,7 +19,6 @@ object dm: Tdm
     Top = 48
   end
   object IBTransaction1: TIBTransaction
-    Active = True
     DefaultDatabase = my_database
     Left = 160
     Top = 48
@@ -856,17 +855,24 @@ object dm: Tdm
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
+      'select'
+      '    the_date,'
+      '    sum(price_ * product_count)as PRICE'
+      'from '
+      '('
+      '    select'
+      '        the_date as THE_DATE,'
+      '        price(product_id,the_date) as price_,'
+      '        product_count'
+      '    from'
       
-        'select the_date as THE_DATE , sum( (select out_price from get_pr' +
-        'ice(product_id,the_date)) ) as PRICE'
-      'from'
-      
-        'daily_income join daily_income_item on daily_income.id = daily_i' +
-        'ncome_id'
-      'where'
-      'datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
-      'AND'
-      'datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0'
+        '    daily_income join daily_income_item on daily_income.id = dai' +
+        'ly_income_id'
+      '    where'
+      '    datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
+      '    AND'
+      '    datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0'
+      ')'
       'group by the_date')
     Left = 288
     Top = 1112
@@ -889,14 +895,22 @@ object dm: Tdm
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
-      
-        'select the_date as THE_DATE , sum( (select out_price from get_pr' +
-        'ice(product_id,the_date)) ) as PRICE'
-      'from loss  join loss_item on loss.id = loss_item.id'
-      'where'
-      'datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
-      'AND'
-      'datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0'
+      'select'
+      '    the_date,'
+      '    sum(price_ * product_count)as PRICE'
+      'from '
+      '('
+      '    select'
+      '        the_date as THE_DATE,'
+      '        price(product_id,the_date) as price_,'
+      '        product_count'
+      '    from'
+      '    loss join loss_item on loss.id = loss_id'
+      '    where'
+      '    datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
+      '    AND'
+      '    datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0'
+      ')'
       'group by the_date')
     Left = 432
     Top = 1120

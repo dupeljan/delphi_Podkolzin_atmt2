@@ -2,7 +2,7 @@ object dm: Tdm
   OldCreateOrder = False
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
-  Height = 947
+  Height = 1203
   Width = 714
   object my_database: TIBDatabase
     Connected = True
@@ -646,6 +646,269 @@ object dm: Tdm
       item
         DataType = ftInteger
         Name = 'in_daily_income_id'
+        ParamType = ptInput
+      end>
+  end
+  object qlist: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select'
+      ' provider_id, exel_list_id, provider.name as provider_name '
+      'from'
+      'exel_list_item join provider on provider_id = provider.id'
+      ';')
+    Left = 56
+    Top = 944
+  end
+  object spDeleteList: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'DELETE_LIST_ITEM'
+    Left = 112
+    Top = 1016
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IN_PROVIDER_ID'
+        ParamType = ptInput
+      end>
+  end
+  object spAddList: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'ADD_LIST_ITEM'
+    Left = 32
+    Top = 1016
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IN_PROVIDER_ID'
+        ParamType = ptInput
+      end>
+  end
+  object QGetProvider_products: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      
+        'select id, name as product_name from product where provider_id =' +
+        ' :IN_PROVIDER_ID;')
+    Left = 336
+    Top = 944
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IN_PROVIDER_ID'
+        ParamType = ptInput
+      end>
+  end
+  object spGetCount: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'GET_PRODUCT_COUNT'
+    Left = 432
+    Top = 944
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IN_PRODUCT_ID'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'IN_DATE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'OUT_COUNT'
+        ParamType = ptOutput
+      end
+      item
+        DataType = ftInteger
+        Name = 'OUT_DAILY_INCOME'
+        ParamType = ptOutput
+      end
+      item
+        DataType = ftInteger
+        Name = 'OUT_LOSS'
+        ParamType = ptOutput
+      end
+      item
+        DataType = ftInteger
+        Name = 'OUT_PURCH'
+        ParamType = ptOutput
+      end>
+  end
+  object spGetPrice: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'GET_PRICE'
+    Left = 496
+    Top = 944
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'OUT_PRICE'
+        ParamType = ptOutput
+      end
+      item
+        DataType = ftInteger
+        Name = 'IN_PRODUCT_ID'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'IN_DATE'
+        ParamType = ptInput
+      end>
+  end
+  object QGet_Period_Daily_income: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      
+        'select the_date as THE_DATE , sum( (select out_price from get_pr' +
+        'ice(product_id,the_date)) ) as PRICE'
+      'from'
+      
+        'daily_income join daily_income_item on daily_income.id = daily_i' +
+        'ncome_id'
+      
+        'where product_id in (select id from product where provider_id = ' +
+        ':IN_PROVIDER_ID)'
+      'AND'
+      'datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
+      'AND'
+      'datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0'
+      'group by the_date')
+    Left = 296
+    Top = 1032
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IN_PROVIDER_ID'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_BEGIN_DATE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_END_DATE'
+        ParamType = ptInput
+      end>
+  end
+  object QGet_Period_Loss: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      
+        'select the_date as THE_DATE , sum( (select out_price from get_pr' +
+        'ice(product_id,the_date)) ) as PRICE'
+      'from loss  join loss_item on loss.id = loss_item.id'
+      
+        'where product_id in (select  id from product where provider_id =' +
+        ' :IN_PROVIDER_ID)'
+      'AND'
+      'datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
+      'AND'
+      'datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0'
+      'group by the_date')
+    Left = 416
+    Top = 1032
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IN_PROVIDER_ID'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_BEGIN_DATE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_END_DATE'
+        ParamType = ptInput
+      end>
+  end
+  object qGet_global_period_daily_income: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      
+        'select the_date as THE_DATE , sum( (select out_price from get_pr' +
+        'ice(product_id,the_date)) ) as PRICE'
+      'from'
+      
+        'daily_income join daily_income_item on daily_income.id = daily_i' +
+        'ncome_id'
+      'where'
+      'datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
+      'AND'
+      'datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0'
+      'group by the_date')
+    Left = 288
+    Top = 1112
+    ParamData = <
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_BEGIN_DATE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_END_DATE'
+        ParamType = ptInput
+      end>
+  end
+  object qGet_global_period_loss: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      
+        'select the_date as THE_DATE , sum( (select out_price from get_pr' +
+        'ice(product_id,the_date)) ) as PRICE'
+      'from loss  join loss_item on loss.id = loss_item.id'
+      'where'
+      'datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
+      'AND'
+      'datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0'
+      'group by the_date')
+    Left = 432
+    Top = 1120
+    ParamData = <
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_BEGIN_DATE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_END_DATE'
         ParamType = ptInput
       end>
   end
