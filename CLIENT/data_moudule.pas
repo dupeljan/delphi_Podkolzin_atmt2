@@ -57,6 +57,8 @@ type
     qGet_global_period_loss: TIBQuery;
     qPurchase_inv_item_filered_prov: TIBQuery;
     qPurchase_inv_item_only_povider: TIBQuery;
+    QGet_Period_purchase: TIBQuery;
+    qGet_global_period_purchase: TIBQuery;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
     procedure update_all;
@@ -107,6 +109,7 @@ begin
   dm.qGet_global_period_daily_income.Close;
   dm.qGet_global_period_loss.Close;
   dm.qPurchase_inv_item_filered_prov.Close;
+  dm.qGet_global_period_purchase.Close;
 
   DM.TProvider.Open;
   DM.TProduct.Open;
@@ -129,6 +132,7 @@ begin
   dm.qGet_global_period_daily_income.Open;
   dm.qGet_global_period_loss.Open;
   dm.qPurchase_inv_item_filered_prov.Open;
+  dm.qGet_global_period_purchase.open;
 
 end;
 

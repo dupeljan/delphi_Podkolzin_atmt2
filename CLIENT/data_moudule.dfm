@@ -1004,4 +1004,94 @@ object dm: Tdm
         ParamType = ptInput
       end>
   end
+  object QGet_Period_purchase: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select'
+      '    the_date,'
+      '    sum(price_ * product_count)as PRICE'
+      'from '
+      '('
+      '    select'
+      '        the_date as THE_DATE,'
+      '        price(product_id,the_date) as price_,'
+      '        product_count'
+      '    from'
+      
+        '    purchase_inv join purchase_inv_item on purchase_inv.id = pur' +
+        'chase_inv_id'
+      '    where'
+      
+        '    product_id in (select id from product where provider_id = :I' +
+        'N_PROVIDER_ID)'
+      '    AND'
+      '    datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
+      '    AND'
+      '    datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0'
+      ')'
+      'group by the_date')
+    Left = 568
+    Top = 1024
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IN_PROVIDER_ID'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_BEGIN_DATE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_END_DATE'
+        ParamType = ptInput
+      end>
+  end
+  object qGet_global_period_purchase: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select'
+      '    the_date,'
+      '    sum(price_ * product_count)as PRICE'
+      'from '
+      '('
+      '    select'
+      '        the_date as THE_DATE,'
+      '        price(product_id,the_date) as price_,'
+      '        product_count'
+      '    from'
+      
+        '    purchase_inv join purchase_inv_item on purchase_inv.id = pur' +
+        'chase_inv_id'
+      '    where'
+      '    datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
+      '    AND'
+      '    datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0'
+      ')'
+      'group by the_date'
+      '')
+    Left = 544
+    Top = 1112
+    ParamData = <
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_BEGIN_DATE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_END_DATE'
+        ParamType = ptInput
+      end>
+  end
 end

@@ -7,7 +7,8 @@ procedure create_daily_income();
 procedure create_exel();
 
 implementation
-uses comObj, data_moudule,  sysutils,wordXP, excelXP,exel_input_window;
+uses comObj, data_moudule,  sysutils,wordXP, excelXP,exel_input_window,
+  IBX.IBQuery, DateUtils;
 
 procedure create_invoice();
 var
@@ -196,9 +197,187 @@ begin
 
 end;
 
+function create_date_sum_table(q :TIBquery; MS_Word :Variant; i : integer;
+        type_: boolean{true if date of paying needed}): integer;
+var
+  count, totalsum, j, cols : integer;
+  str: string;
+begin
+       // Get invices during period
+        with q do begin
+            ParamByName('IN_PROVIDER_ID').Value
+                := dm.qList.FieldByName('PROVIDER_ID').Value;
+            ParamByName('IN_DATE_BEGIN_DATE').value
+                := exel_input_form.DateTimeFrom.Date;
+            ParamByName('IN_DATE_END_DATE').value
+                := exel_input_form.DateTimeTo.Date;
+             // udpate it
+             close;
+             open;
+
+             // Get count
+             last;
+             count :=  RecordCount;
+             first;
+
+               // Table of invoice for period
+               MS_WORD.ActiveDocument.Range.InsertAfter('Поставки за период с ' +
+                  datetostr(exel_input_form.DateTimeFrom.Date)
+                  + ' по ' + datetostr(exel_input_form.DateTimeTo.Date) + '.');
+               MS_WORD.ActiveDocument.Range.InsertAfter(#13#10);
+               if type_ then
+                cols := 3
+                else
+                  cols := 2;
+
+               MS_WORD.ActiveDocument.Tables.Add(
+                MS_WORD.ActiveDocument.Range.Characters.Last,RecordCount+1,cols);
 
 
+                //with Tables.Item(1) do
+                //begin
+                    MS_WORD.ActiveDocument.Tables.Item(i).
+                      Borders.InsideLineStyle:=wdLineStyleSingle;
+                    MS_WORD.ActiveDocument.Tables.Item(i).
+                      Borders.OutsideLineStyle:=wdLineStyleSingle;
+                    MS_WORD.ActiveDocument.Tables.Item(i).
+                      cell(1,1).Range.Text := 'Дата';
+                    MS_WORD.ActiveDocument.Tables.Item(i).
+                      cell(1,2).Range.Text := 'Cумма';
+                    if cols = 3 then
+                      MS_WORD.ActiveDocument.Tables.Item(i).
+                        cell(1,3).Range.Text := 'Срок оплаты';
+
+                    totalsum := 0;
+                    for j := 0 to RecordCount -1 do
+                    begin
+                      // Put date and price to table
+                      MS_WORD.ActiveDocument.Tables.Item(i).
+                        cell(2 + j,1).Range.Text
+                           := FieldByName('THE_DATE').asString;
+                      MS_WORD.ActiveDocument.Tables.Item(i).
+                        cell(2 + j,2).Range.Text
+                           := FieldByName('PRICE').asString;
+
+                      if cols = 3 then
+                      begin
+                        if DaysBetween(date,FieldByName('THE_DATE').value) > 90 then
+                          str := 'ПРОСРОЧЕНО'
+                        else
+                          str := 'НЕПРОСРОЧЕНО';
+
+                           MS_WORD.ActiveDocument.Tables.Item(i).
+                        cell(2 + j,3).Range.Text
+                           := str;
+                      end;
+
+
+                      totalsum := totalsum + FieldByName('PRICE').value;
+                      next;
+                    end;
+
+                //end;
+
+      //  end;
+
+        MS_WORD.ActiveDocument.Range.InsertAfter(#13#10);
+        MS_WORD.ActiveDocument.Range.InsertAfter('ИТОГО: ' + inttostr(totalsum));
+        MS_WORD.ActiveDocument.Range.InsertAfter(#13#10);
+
+    end;
+    create_date_sum_table := totalsum;
+end;
 procedure create_exel();
+var
+title,text : string;
+ MS_Word: Variant;
+ i,j ,sum,totalsum_Spent, totalsum_returned,price,id,count: integer;
+ the_date : TDate;
+begin
+  try
+    MS_Word:=CreateOleObject('Word.Application');
+    MS_Word.Visible:=true;
+    MS_Word.Documents.Add;
+    MS_Word.Selection.Start:=20;
+
+    //with MS_WORD.ActiveDocument do begin
+        MS_WORD.ActiveDocument.Range.InsertAfter('  МАТЕРИАЛЬНЫЙ ОТЧЕТ ОТ '
+             + dateToStr(date));
+        MS_WORD.ActiveDocument.Range.InsertAfter(#13#10);
+     with dm.qlist do begin
+        last;
+        count := RecordCount;
+        first;
+        for I := 0 to count - 1 do  begin
+
+          MS_WORD.ActiveDocument.Range.InsertAfter('ПОСТАВЩИК: ' +
+            fieldByName('PROVIDER_NAME').AsString);
+          MS_WORD.ActiveDocument.Range.InsertAfter(#13#10);
+          totalsum_spent :=
+            create_date_sum_table(dm.QGet_Period_purchase,MS_word,(I+1)*2 -1,true);
+          totalsum_returned :=
+            create_date_sum_table(dm.QGet_Period_Loss,MS_word,(I+1)*2,false);
+
+          MS_WORD.ActiveDocument.Range.InsertAfter('ОСТАТОК: ' +
+             inttostr( totalsum_spent - totalsum_returned));
+          MS_WORD.ActiveDocument.Range.InsertAfter(#13#10);
+        end;
+
+     end;
+    //  Get
+
+
+
+      {
+
+
+    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,1).Range.Text:='№ товарной позиции';
+    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,2).Range.Text:='Наименование товара';
+    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,3).Range.Text:='Производитель';
+    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,4).Range.Text:='Цена';
+    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,5).Range.Text:='Количество';
+    MS_Word.ActiveDocument.Tables.Item(1).Cell(1,6).Range.Text:='Сумма';
+
+    dm.QDaily_incomeWithPrice.first;
+
+
+    for i := 2 to dm.QDaily_incomeWithPrice.RecordCount+1 do
+    begin
+
+
+
+      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,1).Range.Text:= intToStr(i-1);
+      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,2).Range.Text:=dm.QDaily_incomeWithPrice.FieldByName('PRODUCT_NAME').AsString;
+      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,3).Range.Text:=dm.QDaily_incomeWithPrice.FieldByName('PROVIDER_NAME').AsString;
+      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,4).Range.Text:= dm.QDaily_incomeWithPrice.FieldByName('PRICE').AsString;
+      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,5).Range.Text:=dm.QDaily_incomeWithPrice.FieldByName('PRODUCT_COUNT').AsString;
+
+      sum := dm.QDaily_incomeWithPrice.FieldByName('PRICE').AsInteger;
+      sum := sum * dm.QDaily_incomeWithPrice.FieldByName('PRODUCT_COUNT').Asinteger;
+      totalsum := totalsum + sum;
+      MS_Word.ActiveDocument.Tables.Item(1).Cell(i,6).Range.Text:= intToStr(sum);
+
+      dm.QDaily_incomeWithPrice.next;
+    end;
+
+    MS_Word.ActiveDocument.Range.InsertAfter(' ИТОГО  ' + inttostr(totalsum) + ' руб.');
+    MS_Word.ActiveDocument.Range.InsertAfter(#13#10);
+
+    MS_Word.Visible:=true;
+    MS_Word.DisplayAlerts := False;
+  except
+    MS_Word.DisplayAlerts := False;
+    MS_Word.Quit;
+  end;  }
+    MS_Word.Visible:=true;
+    MS_Word.DisplayAlerts := False;
+  except
+    MS_Word.DisplayAlerts := False;
+    MS_Word.Quit;
+  end;
+end;
+
+procedure create_exel_old();
 Var
    varDiagram_sell, varDiagram_loss, sheet: OleVariant;
    Ap : Variant;
