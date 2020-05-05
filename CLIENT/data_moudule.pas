@@ -63,6 +63,9 @@ type
     qInv_full_info: TIBQuery;
     qShippers_Unset: TIBQuery;
     qInv_full_filtered_period: TIBQuery;
+    spAdd_shipper: TIBStoredProc;
+    spEdit_shipper: TIBStoredProc;
+    spDelete_shipper: TIBStoredProc;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
     procedure update_all;

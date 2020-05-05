@@ -16,7 +16,9 @@ uses
   WordExelReport in 'WordExelReport.pas',
   exel_input_window in 'exel_input_window.pas' {EXEL_INPUT_FORM},
   choose_provider_window in 'choose_provider_window.pas' {CHOOSE_PROVIDER_FORM},
-  diagram_window in 'diagram_window.pas' {DIAGRAM_FORM};
+  diagram_window in 'diagram_window.pas' {DIAGRAM_FORM},
+  shipper_window_ in 'shipper_window_.pas' {shipper_form},
+  shipper_add_window in 'shipper_add_window.pas' {SHIPPER_ADD_FORM};
 
 {$R *.res}
 
@@ -37,5 +39,7 @@ begin
   Application.CreateForm(TEXEL_INPUT_FORM, EXEL_INPUT_FORM);
   Application.CreateForm(TCHOOSE_PROVIDER_FORM, CHOOSE_PROVIDER_FORM);
   Application.CreateForm(TDIAGRAM_FORM, DIAGRAM_FORM);
+  Application.CreateForm(Tshipper_form, shipper_form);
+  Application.CreateForm(TSHIPPER_ADD_FORM, SHIPPER_ADD_FORM);
   Application.Run;
 end.

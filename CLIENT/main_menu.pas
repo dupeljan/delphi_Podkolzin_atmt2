@@ -31,6 +31,7 @@ type
     DBGrid2: TDBGrid;
     Label1: TLabel;
     Label2: TLabel;
+    MENU_SHIPPER: TMenuItem;
     procedure MENU_PROVIDERClick(Sender: TObject);
     procedure MENU_PRODUCTClick(Sender: TObject);
     procedure MENU_PURCHASE_INV_ADDClick(Sender: TObject);
@@ -43,6 +44,7 @@ type
     procedure MENU_WORD_EXPORTClick(Sender: TObject);
     procedure MENU_REPORTClick(Sender: TObject);
     procedure DIAGRAM_MENUClick(Sender: TObject);
+    procedure MENU_SHIPPERClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -58,7 +60,7 @@ implementation
 
 uses provider_window, product_window, inv_window, loss_window,
   daily_income_window, data_moudule, WordExelReport, exel_input_window,
-  diagram_window;
+  diagram_window, shipper_window_;
 
 procedure TMAIN_MENU_FORM.ComboBox_invChange(Sender: TObject);
 begin
@@ -88,13 +90,8 @@ begin
       dm.QLoss_filetered.ParamByName('IN_PURCHASE_INV_ID').Value
         := dm.TPurchase_inv.FieldByName('ID').Value;
     end;
-    {
-    1: begin
-      id :=   dm.TLoss.FieldByName('ID').Value;
-      dm.QLossWithPrice.ParamByName('in_loss_id').Value:= id;
-      DataSource_inv_item.DataSet := dm.QLossWithPrice;
-    end;
-     }
+
+
     1: begin
       id := dm.TDaily_income.FieldByName('ID').Value;
       dm.QDaily_incomeWithPrice.ParamByName('in_daily_income_id').Value:= id;
@@ -147,26 +144,7 @@ begin
           // Reopen table
         end;
     end;
-    {
-  1: begin
-       // Create dialog window
-      if MessageDlg('kill '+dm.TLoss.FieldByName('ID').AsString+'?',
-                mtConfirmation,[mbYes,mbNo],0)=mrYes then
-        begin
 
-          // Receve id from grid
-          dm.spDeleteLoss.ParamByName('IN_ID').Value:=dm.TLoss.FieldByName('ID').Value;
-
-          // Execute the procedure
-          if not(dm.spDeleteLoss.Transaction.InTransaction) then
-             dm.spDeleteLoss.Transaction.StartTransaction;
-          dm.spDeleteLoss.ExecProc;
-          dm.spDeleteLoss.Transaction.Commit;
-
-          // Reopen table
-        end;
-  end;
-    }
   1: begin
       // Create dialog window
       if MessageDlg('kill '+dm.TDaily_income.FieldByName('ID').AsString+'?',
@@ -215,13 +193,14 @@ begin
  EXEL_INPUT_FORM.showModal;
 end;
 
+procedure TMAIN_MENU_FORM.MENU_SHIPPERClick(Sender: TObject);
+begin
+ SHIPPER_FORM.showModal;
+end;
+
 procedure TMAIN_MENU_FORM.MENU_WORD_EXPORTClick(Sender: TObject);
 begin
-  case ComboBox_inv.ItemIndex of
-  0: create_invoice;
-  //1: create_loss;
-  1: create_daily_income;
-  end;
+  create_invoice;
 
 end;
 

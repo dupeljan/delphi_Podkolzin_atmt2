@@ -2,8 +2,8 @@ object dm: Tdm
   OldCreateOrder = False
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
-  Height = 1203
-  Width = 714
+  Height = 1196
+  Width = 887
   object my_database: TIBDatabase
     Connected = True
     DatabaseName = 
@@ -19,6 +19,7 @@ object dm: Tdm
     Top = 48
   end
   object IBTransaction1: TIBTransaction
+    Active = True
     DefaultDatabase = my_database
     Left = 160
     Top = 48
@@ -1117,12 +1118,38 @@ object dm: Tdm
   object TShipper: TIBTable
     Database = my_database
     Transaction = IBTransaction1
+    Active = True
     BufferChunks = 1000
     CachedUpdates = False
+    FieldDefs = <
+      item
+        Name = 'ID'
+        Attributes = [faRequired]
+        DataType = ftInteger
+      end
+      item
+        Name = 'NAME'
+        Attributes = [faRequired]
+        DataType = ftWideString
+        Size = 30
+      end
+      item
+        Name = 'TEL'
+        Attributes = [faRequired]
+        DataType = ftWideString
+        Size = 11
+      end>
+    IndexDefs = <
+      item
+        Name = 'PK_SHIPPER'
+        Fields = 'ID'
+        Options = [ixUnique]
+      end>
+    StoreDefs = True
     TableName = 'SHIPPER'
     UniDirectional = False
-    Left = 48
-    Top = 288
+    Left = 664
+    Top = 40
   end
   object qInv_full_info: TIBQuery
     Database = my_database
@@ -1334,6 +1361,65 @@ object dm: Tdm
       item
         DataType = ftDate
         Name = 'IN_DATE_END_DATE'
+        ParamType = ptInput
+      end>
+  end
+  object spAdd_shipper: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'ADD_SHIPPER'
+    Left = 728
+    Top = 40
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'OUT_ID'
+        ParamType = ptOutput
+      end
+      item
+        DataType = ftWideString
+        Name = 'IN_TEL'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftWideString
+        Name = 'IN_NAME'
+        ParamType = ptInput
+      end>
+  end
+  object spEdit_shipper: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'EDIT_SHIPPER'
+    Left = 728
+    Top = 96
+    ParamData = <
+      item
+        DataType = ftWideString
+        Name = 'IN_NAME'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftWideString
+        Name = 'IN_TEL'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'IN_SHIPPER_ID'
+        ParamType = ptInput
+      end>
+  end
+  object spDelete_shipper: TIBStoredProc
+    Database = my_database
+    Transaction = IBTransaction1
+    StoredProcName = 'DELETE_SHIPPER'
+    Left = 800
+    Top = 96
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IN_ID'
         ParamType = ptInput
       end>
   end

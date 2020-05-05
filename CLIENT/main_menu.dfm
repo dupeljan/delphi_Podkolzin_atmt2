@@ -62,7 +62,7 @@ object MAIN_MENU_FORM: TMAIN_MENU_FORM
   object DBGrid_inv_item: TDBGrid
     Left = 326
     Top = 39
-    Width = 473
+    Width = 485
     Height = 186
     DataSource = DataSource_inv_item
     TabOrder = 1
@@ -115,7 +115,7 @@ object MAIN_MENU_FORM: TMAIN_MENU_FORM
   object DBGrid_inv_loss: TDBGrid
     Left = 326
     Top = 256
-    Width = 473
+    Width = 485
     Height = 178
     DataSource = DataSource_inv_loss
     TabOrder = 3
@@ -221,6 +221,10 @@ object MAIN_MENU_FORM: TMAIN_MENU_FORM
   object MainMenu1: TMainMenu
     Left = 360
     Top = 128
+    object MENU_SHIPPER: TMenuItem
+      Caption = #1055#1054#1057#1058#1040#1042#1065#1048#1050#1048
+      OnClick = MENU_SHIPPERClick
+    end
     object MENU_PROVIDER: TMenuItem
       Caption = #1055#1056#1054#1048#1047#1042#1054#1044#1048#1058#1045#1051#1048
       OnClick = MENU_PROVIDERClick
