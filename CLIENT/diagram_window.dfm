@@ -41,11 +41,11 @@ object DIAGRAM_FORM: TDIAGRAM_FORM
     Height = 395
   end
   object Label5: TLabel
-    Left = 467
+    Left = 595
     Top = 21
-    Width = 50
+    Width = 55
     Height = 13
-    Caption = #1055#1054#1050#1059#1055#1050#1048
+    Caption = #1055#1054#1057#1058#1040#1042#1050#1048
   end
   object DateTimePicker_from: TDateTimePicker
     Left = 40

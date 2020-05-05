@@ -27,6 +27,10 @@ type
     ComboBox_inv: TComboBox;
     DBGrid_inv_loss: TDBGrid;
     DataSource_inv_loss: TDataSource;
+    DataSource2: TDataSource;
+    DBGrid2: TDBGrid;
+    Label1: TLabel;
+    Label2: TLabel;
     procedure MENU_PROVIDERClick(Sender: TObject);
     procedure MENU_PRODUCTClick(Sender: TObject);
     procedure MENU_PURCHASE_INV_ADDClick(Sender: TObject);

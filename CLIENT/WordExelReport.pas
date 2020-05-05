@@ -293,7 +293,7 @@ procedure create_exel();
 var
 title,text : string;
  MS_Word: Variant;
- i,j ,sum,totalsum_Spent, totalsum_returned,price,id,count: integer;
+ i,j,k ,num,sum,totalsum_Spent, subcount, SUBSUBCOUNT, totalsum_returned,price,id,count: integer;
  the_date : TDate;
 begin
   try
@@ -310,19 +310,157 @@ begin
         last;
         count := RecordCount;
         first;
+        num := 0;
         for I := 0 to count - 1 do  begin
 
           MS_WORD.ActiveDocument.Range.InsertAfter('ПОСТАВЩИК: ' +
             fieldByName('PROVIDER_NAME').AsString);
-          MS_WORD.ActiveDocument.Range.InsertAfter(#13#10);
-          totalsum_spent :=
-            create_date_sum_table(dm.QGet_Period_purchase,MS_word,(I+1)*2 -1,true);
-          totalsum_returned :=
-            create_date_sum_table(dm.QGet_Period_Loss,MS_word,(I+1)*2,false);
+            MS_WORD.ActiveDocument.Range.InsertAfter(#13#10);
+            // get info about current shipper
+            dm.qInv_full_filtered_period.ParamByName('IN_SHIPPER_ID').Value
+              :=    fieldByName('PROVIDER_ID').Value;
+            dm.qInv_full_filtered_period.ParamByName('IN_DATE_BEGIN_DATE').value
+              :=  exel_input_form.DateTimeFrom.Date;
+            dm.qInv_full_filtered_period.ParamByName('IN_DATE_END_DATE').value
+              := exel_input_form.DateTimeTO.Date;
 
-          MS_WORD.ActiveDocument.Range.InsertAfter('ОСТАТОК: ' +
-             inttostr( totalsum_spent - totalsum_returned));
-          MS_WORD.ActiveDocument.Range.InsertAfter(#13#10);
+            // updete  qInv_full_filtered_period
+            dm.qInv_full_filtered_period.Close;
+            dm.qInv_full_filtered_period.Open;
+            // get count
+            dm.qInv_full_filtered_period.Last;
+            subcount := dm.qInv_full_filtered_period.RecordCount;
+            dm.qInv_full_filtered_period.First;
+            for J := 0 to subcount - 1 do
+            begin
+            // for each element in qInv_full_filtered_period
+                  num := num + 1;
+                  MS_WORD.ActiveDocument.Tables.Add(
+                      MS_WORD.ActiveDocument.Range.Characters.Last,2,8);
+
+
+                    MS_WORD.ActiveDocument.Tables.Item(num).
+                      Borders.InsideLineStyle:=wdLineStyleSingle;
+                    MS_WORD.ActiveDocument.Tables.Item(num).
+                      Borders.OutsideLineStyle:=wdLineStyleSingle;
+
+                    MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell(1,1).Range.Text := 'Номер';
+                    MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell(1,2).Range.Text := 'Поставщик';
+                    MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell(1,3).Range.Text := 'Дата';
+                    MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell(1,4).Range.Text := 'Сумма';
+                    MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell(1,5).Range.Text := 'Оплачено';
+                    MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell(1,6).Range.Text := 'Остаток';
+                    MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell(1,7).Range.Text := 'Приход закрыт?';
+                    MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell(1,8).Range.Text := 'Платеж просрочен?';
+
+                   MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell( 2,1).Range.Text :=
+                      dm.qInv_full_filtered_period.
+                        FieldByName('PURCHASE_INV_ID').asString;
+
+                   MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell( 2,2).Range.Text :=
+                      dm.qInv_full_filtered_period.
+                        FieldByName('SHIPPER_NAME').asString;
+
+                   MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell( 2,3).Range.Text :=
+                      dm.qInv_full_filtered_period.
+                        FieldByName('THE_DATE').asString;
+
+                   MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell( 2,4).Range.Text :=
+                      dm.qInv_full_filtered_period.
+                        FieldByName('COST').asString;
+
+                   MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell( 2,5).Range.Text :=
+                      dm.qInv_full_filtered_period.
+                        FieldByName('RETURNED').asString;
+
+                   MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell( 2,6).Range.Text :=
+                      dm.qInv_full_filtered_period.
+                        FieldByName('RETURN_LEFT').asString;
+
+                   MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell( 2,7).Range.Text :=
+                      dm.qInv_full_filtered_period.
+                        FieldByName('DEBT').asString;
+
+                   MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell( 2,8).Range.Text :=
+                      dm.qInv_full_filtered_period.
+                        FieldByName('INV_EXPIRED').asString;
+
+                   // Now draw loss
+                   MS_WORD.ActiveDocument.Range.InsertAfter(#13#10);
+                   MS_WORD.ActiveDocument.Range.InsertAfter('ОПЛАТА');
+                    MS_WORD.ActiveDocument.Range.InsertAfter(#13#10);
+                   // set params
+                   dm.QLoss_filetered.ParamByName('IN_PURCHASE_INV_ID').value
+                    :=  dm.qInv_full_filtered_period.
+                            FieldByName('PURCHASE_INV_ID').Value;
+                   // update
+                      dm.QLoss_filetered.close;
+                      dm.QLoss_filetered.open;
+                   // Draw table
+                   dm.QLoss_filetered.Last;
+                   subsubcount := dm.QLoss_filetered.recordCount;
+                   dm.QLoss_filetered.first;
+
+                   num := num + 1;
+                    MS_WORD.ActiveDocument.Tables.Add(
+                      MS_WORD.ActiveDocument.Range.Characters.Last,subsubcount+1,3);
+
+
+                    MS_WORD.ActiveDocument.Tables.Item(num).
+                      Borders.InsideLineStyle:=wdLineStyleSingle;
+                    MS_WORD.ActiveDocument.Tables.Item(num).
+                      Borders.OutsideLineStyle:=wdLineStyleSingle;
+
+                      MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell( 1,1).Range.Text := 'Номер';
+
+                      MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell( 1,2).Range.Text := 'Дата';
+
+                      MS_WORD.ActiveDocument.Tables.Item(num).
+                      cell( 1,3).Range.Text := 'Сумма';
+
+                      for k := 2 to subsubcount + 1 do
+                      begin
+                        MS_WORD.ActiveDocument.Tables.Item(num).
+                            cell( k ,1).Range.Text :=
+                              dm.QLoss_filetered.
+                                  FieldByName('ID').asString;
+
+                        MS_WORD.ActiveDocument.Tables.Item(num).
+                            cell( k ,2).Range.Text :=
+                              dm.QLoss_filetered.
+                                  FieldByName('THE_DATE').asString;
+
+                        MS_WORD.ActiveDocument.Tables.Item(num).
+                            cell( k,3).Range.Text :=
+                              dm.QLoss_filetered.
+                                  FieldByName('SUM_').asString;
+                          dm.QLoss_filetered.NEXT;
+                      end;
+
+                       MS_WORD.ActiveDocument.Range.InsertAfter(#13#10);
+
+                    dm.qInv_full_filtered_period.Next;
+            end;
+
+          next;
         end;
 
      end;

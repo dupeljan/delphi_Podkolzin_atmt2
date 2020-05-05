@@ -1232,4 +1232,109 @@ object dm: Tdm
     Left = 112
     Top = 944
   end
+  object qInv_full_filtered_period: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select'
+      '    d.purchase_inv_id,'
+      '    shipper_name,'
+      '    shipper_id,'
+      '    the_date,'
+      '    price as cost,'
+      '    coalesce(total_sum,0) as returned,'
+      '    price - coalesce(total_sum,0) as return_left,'
+      
+        '    iif( datediff(DAY,( select cast('#39'Now'#39' as date) from rdb$data' +
+        'base)'
+      '            ,the_date) >= 90 AND'
+      
+        '            price - coalesce(total_sum,0) <= 0, '#39#1044#1072#39','#39#1053#1077#1090#39'  ) as' +
+        ' inv_expired,'
+      '    iif(price - coalesce(total_sum,0) <= 0, '#39#1044#1072#39','#39#1053#1077#1090#39') as debt'
+      'from'
+      '('
+      '    ('
+      '        select'
+      '            purchase_inv_id,'
+      '            price,'
+      '            total_sum'
+      '            '
+      '        from'
+      '        ('
+      '             ('
+      '                /*get full price of purhase */'
+      '                select'
+      '                    purchase_inv_id,'
+      '                    sum(price_ * product_count)as PRICE'
+      '                from '
+      '                ('
+      '                    select'
+      '                        the_date as THE_DATE,'
+      '                        purchase_inv_id,'
+      '                        price(product_id,the_date) as price_,'
+      '                        product_count'
+      '                    from'
+      
+        '                    purchase_inv join purchase_inv_item on purch' +
+        'ase_inv.id = purchase_inv_id'
+      ''
+      '                )'
+      '                group by  purchase_inv_id'
+      '              )  a'
+      '              left join'
+      '              ('
+      '                /* Paid sum for this purchase*/'
+      '                select'
+      '                    purchase_inv_id as purchase_inv_id_loss,'
+      '                    sum(sum_) as total_sum'
+      '                from loss'
+      '                group by purchase_inv_id'
+      '        '
+      '              )  b'
+      '              on   a.purchase_inv_id = b.purchase_inv_id_loss'
+      '        )'
+      '     ) c'
+      '     join'
+      '     (/* date and provider name*/'
+      '        select'
+      '            shipper.name as shipper_name,'
+      '            shipper.id as shipper_id,'
+      '            purchase_inv.the_date as the_date,'
+      '            purchase_inv.id as purchase_inv_id'
+      '        from'
+      '            purchase_inv join shipper on'
+      '            purchase_inv.shipper_id = shipper.id'
+      ''
+      '     ) d'
+      '     on c.purchase_inv_id = d.purchase_inv_id'
+      ')'
+      'where'
+      '    shipper_id = :in_shipper_id'
+      '    AND'
+      '    datediff(DAY,the_date,:IN_DATE_BEGIN_DATE) <= 0'
+      '    AND'
+      '    datediff(DAY,the_date,:IN_DATE_END_DATE)  >= 0')
+    Left = 576
+    Top = 792
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IN_SHIPPER_ID'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_BEGIN_DATE'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'IN_DATE_END_DATE'
+        ParamType = ptInput
+      end>
+  end
 end
