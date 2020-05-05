@@ -16,8 +16,8 @@ object INV_FORM: TINV_FORM
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 104
-    Top = 96
+    Left = 88
+    Top = 72
     Width = 28
     Height = 13
     Caption = #1044#1040#1058#1040
@@ -37,8 +37,8 @@ object INV_FORM: TINV_FORM
     Caption = 'LABEL_INV_NUMBER'
   end
   object PICKER_DATA_INV: TDateTimePicker
-    Left = 48
-    Top = 115
+    Left = 32
+    Top = 91
     Width = 186
     Height = 21
     Date = 43702.000000000000000000
@@ -86,8 +86,8 @@ object INV_FORM: TINV_FORM
       end>
   end
   object BUTTON_ADD_PRODUCT: TButton
-    Left = 88
-    Top = 208
+    Left = 56
+    Top = 256
     Width = 105
     Height = 25
     Caption = #1044#1054#1041#1040#1042#1048#1058#1068' '#1058#1054#1042#1040#1056
@@ -95,8 +95,8 @@ object INV_FORM: TINV_FORM
     OnClick = BUTTON_ADD_PRODUCTClick
   end
   object BUTTON_DELETE_PRODUCT: TButton
-    Left = 88
-    Top = 256
+    Left = 56
+    Top = 304
     Width = 105
     Height = 25
     Caption = #1059#1044#1040#1051#1048#1058#1068' '#1058#1054#1042#1040#1056
@@ -104,17 +104,35 @@ object INV_FORM: TINV_FORM
     OnClick = BUTTON_DELETE_PRODUCTClick
   end
   object BitBtn1: TBitBtn
-    Left = 104
-    Top = 304
+    Left = 72
+    Top = 352
     Width = 75
     Height = 25
     Kind = bkOK
     NumGlyphs = 2
     TabOrder = 4
   end
+  object DBGrid2: TDBGrid
+    Left = 25
+    Top = 130
+    Width = 193
+    Height = 95
+    DataSource = DataSource2
+    TabOrder = 5
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+  end
   object DataSource1: TDataSource
     DataSet = dm.qPurchase_inv_item_filtered
     Left = 440
     Top = 232
+  end
+  object DataSource2: TDataSource
+    DataSet = dm.TShipper
+    Left = 232
+    Top = 168
   end
 end

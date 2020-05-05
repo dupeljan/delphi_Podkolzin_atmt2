@@ -11,13 +11,15 @@ type
   TLOSS_FORM = class(TForm)
     PICKER_DATA_LOSS: TDateTimePicker;
     Label1: TLabel;
-    DBGrid1: TDBGrid;
-    DataSource1: TDataSource;
     BUTTON_ADD_PRODUCT: TButton;
     BUTTON_DELETE_PRODUCT: TButton;
     BitBtn1: TBitBtn;
     Label2: TLabel;
     LABEL_LOSS_NUMBER: TLabel;
+    DBGrid2: TDBGrid;
+    DataSource2: TDataSource;
+    Edit_sum: TEdit;
+    Label3: TLabel;
 
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -120,6 +122,15 @@ begin
      // Fill db procedure parametrs with form valut
     dm.spEditLoss.ParamByName('IN_DATE').value := PICKER_DATA_LOSS.Date;
     dm.spEditLoss.ParamByName('IN_ID').Value := LOSS_ID;
+    dm.spEditLoss.ParamByName('IN_PURCHASE_INV_ID').Value :=
+      dm.TPurchase_inv.FieldByName('ID').Value;
+
+    try
+       dm.spEditLoss.ParamByName('IN_SUM').Value := strtoint(edit_sum.Text);
+    finally
+
+    end;
+
 
 
     // Execute the procedure
@@ -140,7 +151,8 @@ var id : integer;
 begin
   // Fill db procedure parametrs with form valut
     dm.spAddLoss.ParamByName('IN_DATE').value :=  now;
-
+    dm.spAddLoss.ParamByName('IN_PURCHASE_INV_ID').Value :=
+      dm.TPurchase_inv.FieldByName('ID').Value;
 
     // Execute the procedure
     if not dm.spAddLoss.Transaction.InTransaction then

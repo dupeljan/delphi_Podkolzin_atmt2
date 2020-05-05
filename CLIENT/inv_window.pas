@@ -18,6 +18,8 @@ type
     BitBtn1: TBitBtn;
     Label2: TLabel;
     LABEL_INV_NUMBER: TLabel;
+    DBGrid2: TDBGrid;
+    DataSource2: TDataSource;
 
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -125,7 +127,8 @@ begin
      // Fill db procedure parametrs with form valut
     dm.spEditPurchase_inv.ParamByName('IN_DATE').value := PICKER_DATA_INV.Date;
     dm.spEditPurchase_inv.ParamByName('IN_ID').Value := inv_id;
-
+    dm.spEditPurchase_inv.ParamByName('IN_SHIPPER_ID').value
+     := dm.TShipper.FieldByName('ID').value;
 
     // Execute the procedure
     if not dm.spEditPurchase_inv.Transaction.InTransaction then
@@ -145,7 +148,8 @@ var id : integer;
 begin
   // Fill db procedure parametrs with form valut
     dm.spAddPurchase_inv.ParamByName('IN_DATE').value :=  now;
-
+    dm.spAddPurchase_inv.ParamByName('IN_SHIPPER_ID').Value
+      := dm.TShipper.FieldByName('ID').value;
 
     // Execute the procedure
     if not dm.spAddPurchase_inv.Transaction.InTransaction then
