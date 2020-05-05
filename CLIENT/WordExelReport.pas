@@ -16,13 +16,13 @@ sheet: OleVariant;
    Ap : Variant;
    i,j ,sum,totalsum,price,id, shift,header, provider_count, product_count: integer;
    the_date : TDate;
-   columnN : string;
+   columnN, SHIPPER : string;
 begin
 
   Ap := CreateOleObject('Excel.Application');
   sheet := Ap.Workbooks.Add;
   shift := 2;
-  header := 1;
+  header := 2;
   // setup id and data
   id := dm.TPurchase_inv.FieldByName('ID').value;
   the_date :=  dm.TPurchase_inv.FieldByName('THE_DATE').value;
@@ -45,8 +45,10 @@ begin
            'ТОВАРНО-ТРАНСПОРТНАЯ НАКЛАДНАЯ';
          Ap.Range['B' + inttostr(shift + 1)] := 'Грузоотправитель';
          Ap.Range['D' + inttostr(shift + 1)] :=
-          dm.qPurchase_inv_item_only_povider.FieldByName('PROVIDER_NAME').AsString;
-          //Ap.Range['B' + inttostr(shift + 2)] := 'Грузополучатель';
+          dm.qPurchase_inv_item_only_povider.FieldByName('SHIPPER_NAME').AsString;
+         Ap.Range['B' + inttostr(shift + 2)] := 'Производитель';
+         Ap.Range['D' + inttostr(shift + 2)] :=
+              dm.qPurchase_inv_item_only_povider.FieldByName('PROVIDER_NAME').AsString;
           //Ap.Range['B' + inttostr(shift + 3)] := 'Плательщик';
           columnN :=  inttostr(shift + header + 1);
           Ap.Range['B' + columnN] := '№ товарной позиции';

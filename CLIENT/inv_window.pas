@@ -20,6 +20,8 @@ type
     LABEL_INV_NUMBER: TLabel;
     DBGrid2: TDBGrid;
     DataSource2: TDataSource;
+    Label3: TLabel;
+    Label4: TLabel;
 
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);

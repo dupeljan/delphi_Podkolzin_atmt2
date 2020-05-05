@@ -1,9 +1,9 @@
 object LOSS_FORM: TLOSS_FORM
   Left = 0
   Top = 0
-  Caption = #1057#1054#1047#1044#1040#1053#1048#1045' '#1057#1055#1048#1057#1040#1053#1048#1071
+  Caption = #1057#1054#1047#1044#1040#1053#1048#1045' '#1050#1042#1048#1058#1040#1053#1062#1048#1048' '#1054#1055#1051#1040#1058#1067' '#1053#1040#1050#1051#1040#1044#1053#1054#1049
   ClientHeight = 390
-  ClientWidth = 733
+  ClientWidth = 773
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -52,40 +52,22 @@ object LOSS_FORM: TLOSS_FORM
     Time = 0.594005995371844600
     TabOrder = 0
   end
-  object BUTTON_ADD_PRODUCT: TButton
-    Left = 64
-    Top = 248
-    Width = 105
-    Height = 25
-    Caption = #1044#1054#1041#1040#1042#1048#1058#1068' '#1058#1054#1042#1040#1056
-    TabOrder = 1
-    OnClick = BUTTON_ADD_PRODUCTClick
-  end
-  object BUTTON_DELETE_PRODUCT: TButton
-    Left = 64
-    Top = 296
-    Width = 105
-    Height = 25
-    Caption = #1059#1044#1040#1051#1048#1058#1068' '#1058#1054#1042#1040#1056
-    TabOrder = 2
-    OnClick = BUTTON_DELETE_PRODUCTClick
-  end
   object BitBtn1: TBitBtn
-    Left = 80
-    Top = 344
+    Left = 49
+    Top = 357
     Width = 75
     Height = 25
     Kind = bkOK
     NumGlyphs = 2
-    TabOrder = 3
+    TabOrder = 1
   end
   object DBGrid2: TDBGrid
-    Left = 56
-    Top = 122
-    Width = 641
-    Height = 95
+    Left = 12
+    Top = 131
+    Width = 753
+    Height = 207
     DataSource = DataSource2
-    TabOrder = 4
+    TabOrder = 2
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
     TitleFont.Height = -11
@@ -94,6 +76,55 @@ object LOSS_FORM: TLOSS_FORM
     Columns = <
       item
         Expanded = False
+        FieldName = 'PURCHASE_INV_ID'
+        Title.Caption = #1053#1086#1084#1077#1088
+        Width = 40
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'SHIPPER_NAME'
+        Title.Caption = #1055#1086#1089#1090#1072#1074#1097#1080#1082
+        Width = 200
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'THE_DATE'
+        Title.Caption = #1044#1072#1090#1072
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'COST'
+        Title.Caption = #1057#1091#1084#1084#1072
+        Width = 90
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'RETURNED'
+        Title.Caption = #1047#1072#1087#1083#1072#1095#1077#1085#1086
+        Width = 90
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'RETURN_LEFT'
+        Title.Caption = #1044#1086#1083#1075
+        Width = 90
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DEBT'
+        Title.Caption = #1054#1087#1083#1072#1095#1077#1085#1086'?'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'INV_EXPIRED'
+        Title.Caption = #1055#1088#1086#1089#1088#1086#1095#1077#1085#1086'?'
         Visible = True
       end>
   end
@@ -102,12 +133,12 @@ object LOSS_FORM: TLOSS_FORM
     Top = 83
     Width = 121
     Height = 21
-    TabOrder = 5
+    TabOrder = 3
     Text = '0'
   end
   object DataSource2: TDataSource
     DataSet = dm.qInv_full_info
-    Left = 200
-    Top = 232
+    Left = 448
+    Top = 72
   end
 end

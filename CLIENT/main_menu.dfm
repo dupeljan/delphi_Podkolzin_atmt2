@@ -47,9 +47,9 @@ object MAIN_MENU_FORM: TMAIN_MENU_FORM
   end
   object DBGrid_inv_item: TDBGrid
     Left = 326
-    Top = 48
+    Top = 39
     Width = 473
-    Height = 377
+    Height = 186
     DataSource = DataSource_inv_item
     TabOrder = 1
     TitleFont.Charset = DEFAULT_CHARSET
@@ -60,22 +60,23 @@ object MAIN_MENU_FORM: TMAIN_MENU_FORM
     Columns = <
       item
         Expanded = False
-        FieldName = 'PRODUCT_NAME'
-        Title.Caption = #1053#1040#1048#1052#1045#1053#1054#1042#1040#1053#1048#1045
-        Width = 100
+        FieldName = 'PROVIDER_NAME'
+        Title.Caption = #1055#1056#1054#1048#1047#1042#1054#1044#1048#1058#1045#1051#1068
+        Width = 180
         Visible = True
       end
       item
         Expanded = False
-        FieldName = 'PROVIDER_NAME'
-        Title.Caption = #1055#1056#1054#1048#1047#1042#1054#1044#1048#1058#1045#1051#1068
+        FieldName = 'PRODUCT_NAME'
+        Title.Caption = #1058#1054#1042#1040#1056
         Width = 100
         Visible = True
       end
       item
         Expanded = False
         FieldName = 'PRODUCT_COUNT'
-        Title.Caption = #1050#1054#1051'-'#1042#1054
+        Title.Caption = #1050#1054#1051#1048#1063#1045#1057#1058#1042#1054
+        Width = 100
         Visible = True
       end
       item
@@ -95,8 +96,46 @@ object MAIN_MENU_FORM: TMAIN_MENU_FORM
     OnChange = ComboBox_invChange
     Items.Strings = (
       #1055#1056#1048#1061#1054#1044#1053#1067#1045' '#1053#1040#1050#1051#1040#1044#1053#1067#1045
-      #1057#1055#1048#1057#1040#1053#1048#1071
       #1055#1056#1054#1044#1040#1046#1048' '#1047#1040' '#1044#1045#1053#1068)
+  end
+  object DBGrid_inv_loss: TDBGrid
+    Left = 326
+    Top = 230
+    Width = 473
+    Height = 186
+    DataSource = DataSource_inv_loss
+    TabOrder = 3
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'PURCHASE_INV_ID'
+        Title.Caption = #1053#1040#1050#1051#1040#1044#1053#1040#1071' '#8470
+        Width = 90
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ID'
+        Title.Caption = #1053#1054#1052#1045#1056
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'THE_DATE'
+        Title.Caption = #1044#1040#1058#1040
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'SUM_'
+        Title.Caption = #1057#1059#1052#1052#1040
+        Visible = True
+      end>
   end
   object MainMenu1: TMainMenu
     Left = 360
@@ -150,5 +189,10 @@ object MAIN_MENU_FORM: TMAIN_MENU_FORM
     DataSet = dm.qPurchase_inv_item_filtered
     Left = 496
     Top = 8
+  end
+  object DataSource_inv_loss: TDataSource
+    DataSet = dm.QLoss_filetered
+    Left = 504
+    Top = 128
   end
 end

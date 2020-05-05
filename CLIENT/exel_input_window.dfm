@@ -68,7 +68,7 @@ object EXEL_INPUT_FORM: TEXEL_INPUT_FORM
       item
         Expanded = False
         FieldName = 'PROVIDER_NAME'
-        Title.Caption = #1055#1056#1054#1048#1047#1042#1054#1044#1048#1058#1045#1051#1048
+        Title.Caption = #1055#1086#1089#1090#1072#1074#1097#1080#1082#1080
         Width = 200
         Visible = True
       end>

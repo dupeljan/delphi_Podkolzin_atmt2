@@ -1,7 +1,7 @@
 object CHOOSE_PROVIDER_FORM: TCHOOSE_PROVIDER_FORM
   Left = 0
   Top = 0
-  Caption = #1055#1056#1054#1048#1047#1042#1054#1044#1048#1058#1045#1051#1048
+  Caption = #1055#1054#1057#1058#1040#1042#1065#1048#1050#1048
   ClientHeight = 231
   ClientWidth = 505
   Color = clBtnFace
@@ -23,9 +23,9 @@ object CHOOSE_PROVIDER_FORM: TCHOOSE_PROVIDER_FORM
     TabOrder = 0
   end
   object DBGrid1: TDBGrid
-    Left = 56
+    Left = 8
     Top = 24
-    Width = 320
+    Width = 489
     Height = 120
     DataSource = DataSource1
     TabOrder = 1
@@ -34,9 +34,24 @@ object CHOOSE_PROVIDER_FORM: TCHOOSE_PROVIDER_FORM
     TitleFont.Height = -11
     TitleFont.Name = 'Tahoma'
     TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        Title.Caption = #1053#1072#1079#1074#1072#1085#1080#1077
+        Width = 300
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'TEL'
+        Title.Caption = #1058#1077#1083#1077#1092#1086#1085
+        Width = 100
+        Visible = True
+      end>
   end
   object DataSource1: TDataSource
-    DataSet = dm.TProvider
+    DataSet = dm.qShippers_Unset
     Left = 240
     Top = 120
   end

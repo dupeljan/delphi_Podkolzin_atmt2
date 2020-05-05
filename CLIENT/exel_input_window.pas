@@ -51,7 +51,7 @@ begin
   begin
 
     // Fill db procedure parametrs with form valut
-    id :=  dm.TProvider.FieldByName('ID').Value;
+    id :=  dm.qShippers_Unset.FieldByName('ID').Value;
     dm.spAddList.ParamByName('IN_PROVIDER_ID').value:=  id;
 
     // Execute the procedure

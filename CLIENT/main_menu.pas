@@ -25,6 +25,8 @@ type
     DataSource_inv: TDataSource;
     DataSource_inv_item: TDataSource;
     ComboBox_inv: TComboBox;
+    DBGrid_inv_loss: TDBGrid;
+    DataSource_inv_loss: TDataSource;
     procedure MENU_PROVIDERClick(Sender: TObject);
     procedure MENU_PRODUCTClick(Sender: TObject);
     procedure MENU_PURCHASE_INV_ADDClick(Sender: TObject);
@@ -58,8 +60,8 @@ procedure TMAIN_MENU_FORM.ComboBox_invChange(Sender: TObject);
 begin
  case ComboBox_inv.ItemIndex of
   0:DataSource_inv.DataSet := dm.TPurchase_inv;
-  1:DataSource_inv.DataSet := dm.TLoss;
-  2:DataSource_inv.DataSet := dm.TDaily_income;
+  //1:DataSource_inv.DataSet := dm.TLoss;
+  1:DataSource_inv.DataSet := dm.TDaily_income;
   end;
 
   dm.update_all
@@ -78,15 +80,18 @@ begin
       id :=  dm.TPurchase_inv.FieldByName('ID').Value;
       dm.qPurchase_inv_item_filtered.ParamByName('in_purchase_id').Value:= id;
       DataSource_inv_item.DataSet := dm.qPurchase_inv_item_filtered;
+      // Set loss table
+      dm.QLoss_filetered.ParamByName('IN_PURCHASE_INV_ID').Value
+        := dm.TPurchase_inv.FieldByName('ID').Value;
     end;
-
+    {
     1: begin
       id :=   dm.TLoss.FieldByName('ID').Value;
       dm.QLossWithPrice.ParamByName('in_loss_id').Value:= id;
       DataSource_inv_item.DataSet := dm.QLossWithPrice;
     end;
-
-    2: begin
+     }
+    1: begin
       id := dm.TDaily_income.FieldByName('ID').Value;
       dm.QDaily_incomeWithPrice.ParamByName('in_daily_income_id').Value:= id;
       DataSource_inv_item.DataSet := dm.QDaily_incomeWithPrice;
@@ -95,8 +100,8 @@ begin
   dm.update_all;
   case ComboBox_inv.ItemIndex of
   0: dm.TPurchase_inv.Locate('ID',id,[]);
-  1: dm.TLoss.Locate('ID',id,[]);
-  2: dm.TDaily_income.Locate('ID',id,[]);
+  //1: dm.TLoss.Locate('ID',id,[]);
+  1: dm.TDaily_income.Locate('ID',id,[]);
   end;
 end;
 
@@ -138,6 +143,7 @@ begin
           // Reopen table
         end;
     end;
+    {
   1: begin
        // Create dialog window
       if MessageDlg('kill '+dm.TLoss.FieldByName('ID').AsString+'?',
@@ -156,8 +162,8 @@ begin
           // Reopen table
         end;
   end;
-
-  2: begin
+    }
+  1: begin
       // Create dialog window
       if MessageDlg('kill '+dm.TDaily_income.FieldByName('ID').AsString+'?',
                 mtConfirmation,[mbYes,mbNo],0)=mrYes then
@@ -209,8 +215,8 @@ procedure TMAIN_MENU_FORM.MENU_WORD_EXPORTClick(Sender: TObject);
 begin
   case ComboBox_inv.ItemIndex of
   0: create_invoice;
-  1: create_loss;
-  2: create_daily_income;
+  //1: create_loss;
+  1: create_daily_income;
   end;
 
 end;

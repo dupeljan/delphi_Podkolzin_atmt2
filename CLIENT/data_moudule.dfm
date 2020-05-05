@@ -19,7 +19,6 @@ object dm: Tdm
     Top = 48
   end
   object IBTransaction1: TIBTransaction
-    Active = True
     DefaultDatabase = my_database
     Left = 160
     Top = 48
@@ -612,34 +611,23 @@ object dm: Tdm
         ParamType = ptInput
       end>
   end
-  object QLossWithPrice: TIBQuery
+  object QLoss_filetered: TIBQuery
     Database = my_database
     Transaction = IBTransaction1
     BufferChunks = 1000
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
-      'select loss_item.id as loss_item_id,'
-      '       loss_id,'
-      '       product_id,provider_id,product_count,'
-      '       product.name as product_name,'
-      '       provider.name as provider_name,'
-      '       price(product_id,the_date)'
-      'from'
-      'loss_item'
-      'join'
-      'product on loss_item.product_id = product.id'
-      'join'
-      'provider on provider.id = provider_id'
-      'join'
-      'loss on loss.id = loss_id'
-      'where loss_id = :in_loss_id;')
-    Left = 400
-    Top = 56
+      'select *'
+      'from loss'
+      'where'
+      '    purchase_inv_id = :IN_PURCHASE_INV_ID')
+    Left = 120
+    Top = 584
     ParamData = <
       item
         DataType = ftInteger
-        Name = 'in_loss_id'
+        Name = 'IN_PURCHASE_INV_ID'
         ParamType = ptInput
       end>
   end
@@ -682,9 +670,9 @@ object dm: Tdm
     ParamCheck = True
     SQL.Strings = (
       'select'
-      ' provider_id, exel_list_id, provider.name as provider_name '
+      ' provider_id, exel_list_id, shipper.name as provider_name'
       'from'
-      'exel_list_item join provider on provider_id = provider.id'
+      'exel_list_item join SHIPPER on PROVIDER_id = SHIPPER.id'
       ';')
     Left = 56
     Top = 944
@@ -1012,14 +1000,20 @@ object dm: Tdm
     SQL.Strings = (
       'select'
       '      DISTINCT provider.id as provider_id,'
-      '      provider.name as provider_name'
-      ''
+      '      provider.name as provider_name,'
+      '      shipper.name as shipper_name'
       'from'
       'purchase_inv_item'
       'join'
       'product on purchase_inv_item.product_id = product.id'
       'join'
       'provider on provider.id = provider_id'
+      'join'
+      
+        'purchase_inv on    purchase_inv_item.purchase_inv_id = purchase_' +
+        'inv.id'
+      'join'
+      'shipper on PURCHASE_INV.shipper_id = shipper.id'
       'where purchase_inv_id = :in_purchase_id')
     Left = 576
     Top = 456
@@ -1139,12 +1133,20 @@ object dm: Tdm
     SQL.Strings = (
       'select'
       '    d.purchase_inv_id,'
-      '    provider_name,'
+      '    shipper_name,'
       '    shipper_id,'
       '    the_date,'
       '    price as cost,'
       '    coalesce(total_sum,0) as returned,'
-      '    price - coalesce(total_sum,0) as return_left'
+      '    price - coalesce(total_sum,0) as return_left,'
+      
+        '    iif( datediff(DAY,( select cast('#39'Now'#39' as date) from rdb$data' +
+        'base)'
+      '            ,the_date) >= 90 AND'
+      
+        '            price - coalesce(total_sum,0) <= 0, '#39#1044#1072#39','#39#1053#1077#1090#39'  ) as' +
+        ' inv_expired,'
+      '    iif(price - coalesce(total_sum,0) <= 0, '#39#1044#1072#39','#39#1053#1077#1090#39') as debt'
       'from'
       '('
       '    ('
@@ -1191,7 +1193,7 @@ object dm: Tdm
       '     join'
       '     (/* date and provider name*/'
       '        select'
-      '            shipper.name as provider_name,'
+      '            shipper.name as shipper_name,'
       '            shipper.id as shipper_id,'
       '            purchase_inv.the_date as the_date,'
       '            purchase_inv.id as purchase_inv_id'
@@ -1204,5 +1206,30 @@ object dm: Tdm
       ')')
     Left = 568
     Top = 728
+  end
+  object qShippers_Unset: TIBQuery
+    Database = my_database
+    Transaction = IBTransaction1
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select id, name,tel from'
+      '('
+      '    ('
+      '       select * from shipper'
+      '     )  a'
+      '     left join'
+      '     ('
+      '         select'
+      '        provider_id'
+      '        from'
+      '        exel_list_item join SHIPPER on PROVIDER_id = SHIPPER.id'
+      '     ) b'
+      '     on a.id = b.provider_id'
+      ')'
+      'where b.provider_id is null')
+    Left = 112
+    Top = 944
   end
 end

@@ -43,7 +43,7 @@ type
     spDeleteDaily_income_item: TIBStoredProc;
     TDaily_income_item: TIBTable;
     qDaily_income_item_filtered: TIBQuery;
-    QLossWithPrice: TIBQuery;
+    QLoss_filetered: TIBQuery;
     QDaily_incomeWithPrice: TIBQuery;
     qlist: TIBQuery;
     spDeleteList: TIBStoredProc;
@@ -61,6 +61,7 @@ type
     qGet_global_period_purchase: TIBQuery;
     TShipper: TIBTable;
     qInv_full_info: TIBQuery;
+    qShippers_Unset: TIBQuery;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
     procedure update_all;
@@ -103,7 +104,7 @@ begin
   dm.TDaily_income_item.Close;
   dm.qDaily_income_item_filtered.Close;
   dm.QDaily_incomeWithPrice.Close;
-  dm.QLossWithPrice.Close;
+  dm.QLoss_filetered.Close;
   dm.qlist.Close;
   dm.QGetProvider_products.Close;
   dm.QGet_Period_Daily_income.Close;
@@ -114,6 +115,7 @@ begin
   dm.qGet_global_period_purchase.Close;
   dm.TShipper.Close;
   dm.qInv_full_info.Close;
+  dm.qShippers_Unset.Close;
 
   DM.TProvider.Open;
   DM.TProduct.Open;
@@ -128,7 +130,7 @@ begin
   dm.TDaily_income_item.Open;
   dm.qDaily_income_item_filtered.Open;
   dm.QDaily_incomeWithPrice.Open;
-  dm.QLossWithPrice.Open;
+  dm.QLoss_filetered.Open;
   dm.qlist.Open;
   dm.QGetProvider_products.Open;
   dm.QGet_Period_Daily_income.Open;
@@ -139,6 +141,7 @@ begin
   dm.qGet_global_period_purchase.open;
   dm.TShipper.Open;
   dm.qInv_full_info.Open;
+  dm.qShippers_Unset.Open;
 
 end;
 
